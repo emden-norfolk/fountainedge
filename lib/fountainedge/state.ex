@@ -3,5 +3,5 @@ defmodule Fountainedge.State do
   Documentation for Fountainedge.State.
   """
 
-  defstruct node_id: nil, tokens: []
+  defstruct id: nil, tokens: []
 end

@@ -3,5 +3,5 @@ defmodule Fountainedge.Edge do
   Documentation for Fountainedge.Node.
   """
 
-  defstruct current: nil, next: nil
+  defstruct id: nil, next: nil
 end

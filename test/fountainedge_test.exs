@@ -15,16 +15,16 @@ defmodule FountainedgeTest do
         %Node{id: 3, type: 2},
       ],
       edges: [
-        %Edge{current: 1, next: 2},
-        %Edge{current: 2, next: 3},
+        %Edge{id: 1, next: 2},
+        %Edge{id: 2, next: 3},
       ],
       states: [
-        %State{node_id: 1},
+        %State{id: 1},
       ],
     }
 
-    workflow = Workflow.transition(workflow, 1, 2)
-    workflow = Workflow.transition(workflow, 2, 3)
+    workflow = Workflow.transition(workflow, %Edge{id: 1, next: 2})
+    workflow = Workflow.transition(workflow, %Edge{id: 2, next: 3})
     IO.inspect workflow
   end
 end
