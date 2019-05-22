@@ -2,18 +2,29 @@ defmodule FountainedgeTest do
   use ExUnit.Case
   doctest Fountainedge
 
-  test "can compute transitions" do
-    nodes = [
-      %Fountainedge.Node{id: 1, type: 1},
-      %Fountainedge.Node{id: 2},
-      %Fountainedge.Node{id: 3, type: 2},
-    ]
-    edges = [
-      %Fountainedge.Edge{from: 1, to: 2},
-      %Fountainedge.Edge{from: 2, to: 3},
-    ]
-    engine = %Fountainedge{nodes: nodes, edges: edges}
+  alias Fountainedge, as: Workflow
+  alias Fountainedge.Node
+  alias Fountainedge.Edge
+  alias Fountainedge.State
 
-    IO.inspect engine
+  test "can compute transitions" do
+    workflow = %Workflow{
+      nodes: [
+        %Node{id: 1, type: 1},
+        %Node{id: 2},
+        %Node{id: 3, type: 2},
+      ],
+      edges: [
+        %Edge{current: 1, next: 2},
+        %Edge{current: 2, next: 3},
+      ],
+      states: [
+        %State{node_id: 1},
+      ],
+    }
+
+    workflow = Workflow.transition(workflow, 1, 2)
+    workflow = Workflow.transition(workflow, 2, 3)
+    IO.inspect workflow
   end
 end
