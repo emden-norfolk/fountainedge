@@ -3,16 +3,5 @@ defmodule Fountainedge do
   Documentation for Fountainedge.
   """
 
-  @doc """
-  Hello world.
-
-  ## Examples
-
-      iex> Fountainedge.hello()
-      :world
-
-  """
-  def hello do
-    :world
-  end
+  defstruct nodes: [], edges: [], states: []
 end
