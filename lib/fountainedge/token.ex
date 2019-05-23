@@ -3,5 +3,5 @@ defmodule Fountainedge.Token do
   Documentation for Fountainedge.Token.
   """
 
-  defstruct group: nil, id: nil, total: nil
+  defstruct id: nil, token: nil
 end
