@@ -3,9 +3,7 @@ defmodule FountainedgeTest do
   doctest Fountainedge
 
   alias Fountainedge, as: Workflow
-  alias Fountainedge.Node
-  alias Fountainedge.Edge
-  alias Fountainedge.State
+  alias Fountainedge.{Node, Edge, State}
 
   test "can compute transitions" do
     workflow = %Workflow{
