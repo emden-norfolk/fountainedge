@@ -43,10 +43,16 @@ defmodule Fountainedge do
 
     states = Enum.reject(states, fn s -> s.id == next_state.id end) ++ forked_states
 
-    states
+    fork states, schema, edges
   end
 
-  defp join states, schema do
+  defp fork states, %Schema{} = schema, [edge | edges] do
+    fork move(states, schema, edge), schema, edges
+  end
+
+  defp fork(states, %Schema{} = _schema, []), do: states
+
+  defp join states, schema do nil
     states
   end
 end
