@@ -7,12 +7,12 @@ defmodule Fountainedge do
   alias Fountainedge.{Schema, Edge, State, Node, Token}
 
   @fork Node.fork
-  #@join Node.join
+  @join Node.join
 
   defstruct schema: %Schema{}, states: []
 
   def transition %Workflow{} = workflow, %Edge{} = edge do
-    #edge = Enum.find workflow.edges, fn e -> e == edge end
+    #edge = Enum.find workflow.schema.edges, fn e -> e == edge end
 
     %Workflow{workflow | states: move(workflow.states, workflow.schema, edge)}
   end
@@ -26,16 +26,11 @@ defmodule Fountainedge do
     node = Enum.find schema.nodes, fn n -> n.id == edge.next end
     states = case node.type do
       @fork -> fork states, schema, node, next_state
-      #@join -> join
+      @join -> join states, schema
       _ -> states
     end
-    #IO.inspect workflow.states
 
     states
-  end
-
-  def move states, %Schema{} = schema, edges do
-    states = move
   end
 
   defp fork states, %Schema{} = schema, %Node{} = node, %State{} = next_state do
@@ -46,16 +41,12 @@ defmodule Fountainedge do
       [%State{next_state | tokens: tokens} | acc]
     end
 
-    states = Enum.reject states, fn s -> s.id == next_state.id end
-    states ++ forked_states
+    states = Enum.reject(states, fn s -> s.id == next_state.id end) ++ forked_states
 
-    Enum.filter
-
-    Enum.reduce forked_states, [], fn state, acc ->
-      edge = Enum.find(schema.edges, fn e -> e.id == state.id end)
-      [state | acc]
-    end
+    states
   end
 
-  #defp join workflow do
+  defp join states, schema do
+    states
+  end
 end
