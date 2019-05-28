@@ -25,7 +25,7 @@ defmodule Fountainedge do
     node = Enum.find schema.nodes, fn n -> n.id == edge.next end
     states = case node.type do
       @fork -> fork states, schema, node, next_state
-      @join -> join states, schema
+      @join -> join states, schema, node
       _ -> states
     end
 
@@ -57,7 +57,10 @@ defmodule Fountainedge do
 
   defp fork(states, %Schema{} = _schema, []), do: states
 
-  defp join states, schema do nil
+  defp join states, schema, node do nil
+    num_forks = Enum.count schema.edges, fn e -> e.id == 2 end
+    IO.inspect num_forks
+
     states
   end
 end
