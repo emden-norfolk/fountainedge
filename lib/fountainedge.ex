@@ -12,13 +12,12 @@ defmodule Fountainedge do
   defstruct schema: %Schema{}, states: []
 
   def transition %Workflow{} = workflow, %Edge{} = edge do
-    #edge = Enum.find workflow.schema.edges, fn e -> e == edge end
-
     %Workflow{workflow | states: move(workflow.states, workflow.schema, edge)}
   end
 
   defp move states, %Schema{} = schema, %Edge{} = edge do
-    state = Enum.find states, fn s -> s.id == edge.id end
+    edge = Enum.find schema.edges, fn e -> e == edge end
+    state = state states, edge
     states = Enum.reject states, fn s -> s == state end
     next_state = %State{state | id: edge.next}
     states = states ++ [next_state]
@@ -31,6 +30,12 @@ defmodule Fountainedge do
     end
 
     states
+  end
+
+  defp state states, %Edge{} = edge do
+    Enum.find(states, fn state ->
+      state.id == edge.id and Enum.find state.tokens, fn token -> token.token == edge.next end
+    end) || Enum.find states, fn state -> state.id == edge.id end
   end
 
   defp fork states, %Schema{} = schema, %Node{} = node, %State{} = next_state do
