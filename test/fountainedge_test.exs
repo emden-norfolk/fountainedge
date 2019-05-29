@@ -93,7 +93,7 @@ defmodule FountainedgeTest do
 
     workflow = Workflow.transition(workflow, %Edge{id: 6, next: 7})
     assert workflow.states == [
-      %State{id: 7},
+      %State{id: 8},
     ]
   end
 end

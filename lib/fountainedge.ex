@@ -67,7 +67,8 @@ defmodule Fountainedge do
     end
 
     if branches == Enum.count arrivals do
-      join states, node, origin_node, arrivals
+      states = join states, node, origin_node, arrivals
+      transition states, schema, Enum.find(schema.edges, fn e -> e.id == node.id end)
     else
       states
     end
@@ -76,6 +77,6 @@ defmodule Fountainedge do
   defp arrivals
 
   defp join states, %Node{} = node, %Node{} = origin_node, arrivals do
-    states = states -- arrivals
+    (states -- arrivals) ++ [%State{id: node.id}]
   end
 end
