@@ -3,5 +3,7 @@ defmodule Fountainedge.Token do
   Documentation for Fountainedge.Token.
   """
 
+  @enforce_keys [:id, :token]
+
   defstruct id: nil, token: nil
 end

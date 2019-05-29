@@ -5,11 +5,13 @@ defmodule Fountainedge.Node do
 
   alias __MODULE__
 
+  @enforce_keys [:id]
+
   def standard, do: 0
   def initial, do: 1
   def final, do: 2
   def fork, do: 3
   def join, do: 4
 
-  defstruct id: nil, type: 0
+  defstruct id: nil, type: 0, join: nil
 end

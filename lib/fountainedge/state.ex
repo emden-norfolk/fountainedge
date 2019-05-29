@@ -3,5 +3,7 @@ defmodule Fountainedge.State do
   Documentation for Fountainedge.State.
   """
 
+  @enforce_keys [:id]
+
   defstruct id: nil, tokens: []
 end

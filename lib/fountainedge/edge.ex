@@ -3,5 +3,7 @@ defmodule Fountainedge.Edge do
   Documentation for Fountainedge.Node.
   """
 
+  @enforce_keys [:id, :next]
+
   defstruct id: nil, next: nil
 end

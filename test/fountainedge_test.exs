@@ -43,7 +43,7 @@ defmodule FountainedgeTest do
       schema: %Schema{
         nodes: [
           %Node{id: 1, type: Node.initial},
-          %Node{id: 2, type: Node.fork},
+          %Node{id: 2, type: Node.fork, join: 7},
           %Node{id: 3},
           %Node{id: 4},
           %Node{id: 5},
