@@ -50,14 +50,14 @@ defmodule Fountainedge do
 
     states = Enum.reject(states, fn s -> s.id == next_state.id end) ++ forked_states
 
-    fork states, schema, edges
+    fork_transition states, schema, edges
   end
 
-  defp fork states, %Schema{} = schema, [edge | edges] do
-    fork transition(states, schema, edge), schema, edges
+  defp fork_transition states, %Schema{} = schema, [edge | edges] do
+    fork_transition transition(states, schema, edge), schema, edges
   end
 
-  defp fork(states, %Schema{} = _schema, []), do: states
+  defp fork_transition(states, %Schema{} = _schema, []), do: states
 
   defp join states, %Schema{} = schema, %Node{} = node do
     origin_node = Enum.find schema.nodes, fn n -> n.join == node.id end
@@ -67,14 +67,22 @@ defmodule Fountainedge do
     end
 
     if branches == Enum.count arrivals do
-      states = join states, node, origin_node, arrivals
+      states = join_states states, node, origin_node, arrivals
       transition states, schema, Enum.find(schema.edges, fn e -> e.id == node.id end)
     else
       states
     end
   end
 
-  defp join states, %Node{} = node, %Node{} = origin_node, arrivals do
-    (states -- arrivals) ++ [%State{id: node.id}]
+  defp join_states states, %Node{} = node, %Node{} = origin_node, arrivals do
+    tokens = Enum.uniq join_tokens [], origin_node, arrivals
+    (states -- arrivals) ++ [%State{id: node.id, tokens: tokens}]
   end
+
+  defp join_tokens tokens,  %Node{} = origin_node, [state | arrivals] do
+    tokens = tokens ++ Enum.reject state.tokens, fn t -> t.id == origin_node.id end
+    join_tokens tokens, origin_node, arrivals
+  end
+
+  defp join_tokens(tokens, %Node{} = _origin_node, []), do: tokens
 end
