@@ -19,19 +19,16 @@ defmodule Fountainedge do
 
   defp transition states, %Schema{} = schema, %Edge{} = edge do
     edge = Enum.find schema.edges, fn e -> e == edge end
-    state = current_state states, edge
-    states = Enum.reject states, fn s -> s == state end
-    next_state = %State{state | id: edge.next}
-    states = states ++ [next_state]
-
     node = Enum.find schema.nodes, fn n -> n.id == edge.next end
-    states = case node.type do
+    state = current_state states, edge
+    next_state = %State{state | id: edge.next}
+
+    states = Enum.reject(states, fn s -> s == state end) ++ [next_state]
+    case node.type do
       @fork -> fork states, schema, node, next_state
       @join -> join states, schema, node
       _ -> states
     end
-
-    states
   end
 
   defp current_state states, %Edge{} = edge do
