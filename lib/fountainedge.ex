@@ -19,7 +19,7 @@ defmodule Fountainedge do
 
   defp transition states, %Schema{} = schema, %Edge{} = edge do
     edge = Enum.find schema.edges, fn e -> e == edge end
-    state = state states, edge
+    state = current_state states, edge
     states = Enum.reject states, fn s -> s == state end
     next_state = %State{state | id: edge.next}
     states = states ++ [next_state]
@@ -34,7 +34,7 @@ defmodule Fountainedge do
     states
   end
 
-  defp state states, %Edge{} = edge do
+  defp current_state states, %Edge{} = edge do
     Enum.find(states, fn state ->
       state.id == edge.id and Enum.find state.tokens, fn token -> token.token == edge.next end
     end) || Enum.find states, fn state -> state.id == edge.id end
