@@ -61,7 +61,7 @@ defmodule Fountainedge do
 
   defp join states, schema, node do nil
     origin_node = Enum.find schema.nodes, fn n -> n.join == node.id end
-    num_forks = Enum.count schema.edges, fn e -> e.id == origin_node.id end
+    num_branches = Enum.count schema.edges, fn e -> e.id == origin_node.id end
     num_arrivals = Enum.count states, fn s ->
       s.id == node.id and Enum.any? s.tokens, fn t -> t.id == origin_node.id end
     end
