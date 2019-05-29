@@ -48,9 +48,8 @@ defmodule Fountainedge do
       [%State{next_state | tokens: tokens} | acc]
     end
 
-    states = Enum.reject(states, fn s -> s.id == next_state.id end) ++ forked_states
-
-    fork_transition states, schema, edges
+    Enum.reject(states, fn s -> s.id == next_state.id end) ++ forked_states
+    |> fork_transition(schema, edges)
   end
 
   defp fork_transition states, %Schema{} = schema, [edge | edges] do
