@@ -62,18 +62,20 @@ defmodule Fountainedge do
   defp join states, %Schema{} = schema, %Node{} = node do
     origin_node = Enum.find schema.nodes, fn n -> n.join == node.id end
     branches = Enum.count schema.edges, fn e -> e.id == origin_node.id end
-    arrivals = Enum.count states, fn s ->
+    arrivals = Enum.filter states, fn s ->
       s.id == node.id and Enum.any? s.tokens, fn t -> t.id == origin_node.id end
     end
 
-    if branches == arrivals do
-      join states, node, origin_node
+    if branches == Enum.count arrivals do
+      join states, node, origin_node, arrivals
     else
       states
     end
   end
 
-  defp join states, %Node{} = node, %Node{} = origin_node do
-    states
+  defp arrivals
+
+  defp join states, %Node{} = node, %Node{} = origin_node, arrivals do
+    states = states -- arrivals
   end
 end
