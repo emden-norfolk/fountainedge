@@ -147,12 +147,18 @@ defmodule FountainedgeTest do
     workflow = Workflow.transition(workflow, %Edge{id: 4, next: 8})
     workflow = Workflow.transition(workflow, %Edge{id: 5, next: 6})
     workflow = Workflow.transition(workflow, %Edge{id: 9, next: 10})
-    workflow = Workflow.transition(workflow, %Edge{id: 10, next: 11})
     assert workflow.states == [
       %State{id: 7, tokens: [%Token{id: 2, token: 3}, %Token{id: 3, token: 7}]},
       %State{id: 8, tokens: [%Token{id: 2, token: 3}, %Token{id: 3, token: 4}]},
       %State{id: 6, tokens: [%Token{id: 2, token: 3}, %Token{id: 3, token: 5}]},
-      %State{id: 11, tokens: [%Token{id: 2, token: 9}]},
+      %State{id: 10, tokens: [%Token{id: 2, token: 9}]},
+    ]
+
+    workflow = Workflow.transition(workflow, %Edge{id: 6, next: 8})
+    workflow = Workflow.transition(workflow, %Edge{id: 7, next: 8})
+    assert workflow.states == [
+      %State{id: 10, tokens: [%Token{id: 2, token: 9}]},
+      %State{id: 8, tokens: [%Token{id: 2, token: 3}]},
     ]
   end
 end
