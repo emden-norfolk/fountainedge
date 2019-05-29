@@ -50,7 +50,8 @@ defmodule Fountainedge do
   end
 
   defp fork_transition states, %Schema{} = schema, [edge | edges] do
-    fork_transition transition(states, schema, edge), schema, edges
+    transition(states, schema, edge)
+    |> fork_transition(schema, edges)
   end
 
   defp fork_transition(states, %Schema{} = _schema, []), do: states
