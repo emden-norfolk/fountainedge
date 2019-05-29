@@ -59,14 +59,21 @@ defmodule Fountainedge do
 
   defp fork(states, %Schema{} = _schema, []), do: states
 
-  defp join states, schema, node do nil
+  defp join states, %Schema{} = schema, %Node{} = node do
     origin_node = Enum.find schema.nodes, fn n -> n.join == node.id end
-    num_branches = Enum.count schema.edges, fn e -> e.id == origin_node.id end
-    num_arrivals = Enum.count states, fn s ->
+    branches = Enum.count schema.edges, fn e -> e.id == origin_node.id end
+    arrivals = Enum.count states, fn s ->
       s.id == node.id and Enum.any? s.tokens, fn t -> t.id == origin_node.id end
     end
-    IO.inspect num_arrivals
 
+    if branches == arrivals do
+      join states, node, origin_node
+    else
+      states
+    end
+  end
+
+  defp join states, %Node{} = node, %Node{} = origin_node do
     states
   end
 end
