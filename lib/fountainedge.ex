@@ -9,7 +9,9 @@ defmodule Fountainedge do
   @fork Node.fork
   @join Node.join
 
-  defstruct schema: %Schema{}, states: []
+  @enforce_keys [:schema, :states]
+
+  defstruct schema: %Schema{nodes: [], edges: []}, states: []
 
   def transition %Workflow{} = workflow, %Edge{} = edge do
     %Workflow{workflow | states: transition(workflow.states, workflow.schema, edge)}
@@ -58,7 +60,8 @@ defmodule Fountainedge do
   defp fork(states, %Schema{} = _schema, []), do: states
 
   defp join states, schema, node do nil
-    num_forks = Enum.count schema.edges, fn e -> e.id == 2 end
+    origin_node = Enum.find schema.nodes, fn n -> n.join == node.id end
+    num_forks = Enum.count schema.edges, fn e -> e.id == origin_node.id end
     IO.inspect num_forks
 
     states
