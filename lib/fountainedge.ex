@@ -74,8 +74,6 @@ defmodule Fountainedge do
     end
   end
 
-  defp arrivals
-
   defp join states, %Node{} = node, %Node{} = origin_node, arrivals do
     (states -- arrivals) ++ [%State{id: node.id}]
   end
