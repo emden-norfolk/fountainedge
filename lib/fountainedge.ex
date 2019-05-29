@@ -80,8 +80,8 @@ defmodule Fountainedge do
   end
 
   defp join_tokens tokens,  %Node{} = origin_node, [state | arrivals] do
-    tokens = tokens ++ Enum.reject state.tokens, fn t -> t.id == origin_node.id end
-    join_tokens tokens, origin_node, arrivals
+    tokens ++ Enum.reject(state.tokens, fn t -> t.id == origin_node.id end)
+    |> join_tokens(origin_node, arrivals)
   end
 
   defp join_tokens(tokens, %Node{} = _origin_node, []), do: tokens
