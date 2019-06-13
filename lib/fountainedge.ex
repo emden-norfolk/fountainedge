@@ -6,9 +6,6 @@ defmodule Fountainedge do
   alias __MODULE__, as: Workflow
   alias Fountainedge.{Schema, Edge, State, Node, Token}
 
-  @fork Node.fork
-  @join Node.join
-
   @enforce_keys [:schema, :states]
 
   defstruct schema: %Schema{nodes: [], edges: []}, states: []
@@ -25,8 +22,8 @@ defmodule Fountainedge do
 
     states = Enum.reject(states, fn s -> s == state end) ++ [next_state]
     case node.type do
-      @fork -> fork states, schema, node, next_state
-      @join -> join states, schema, node
+      :fork -> fork states, schema, node, next_state
+      :join -> join states, schema, node
       _ -> states
     end
   end

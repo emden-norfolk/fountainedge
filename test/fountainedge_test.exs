@@ -5,21 +5,13 @@ defmodule FountainedgeTest do
   alias Fountainedge, as: Workflow
   alias Fountainedge.{Schema, Node, Edge, State, Token}
 
-  test "constants" do
-    assert Node.standard == 0
-    assert Node.initial == 1
-    assert Node.final == 2
-    assert Node.fork == 3
-    assert Node.join == 4
-  end
-
   test "can compute transitions" do
     workflow = %Workflow{
       schema: %Schema{
         nodes: [
-          %Node{id: 1, type: Node.initial},
+          %Node{id: 1, type: :initial},
           %Node{id: 2},
-          %Node{id: 3, type: Node.final},
+          %Node{id: 3, type: :final},
         ],
         edges: [
           %Edge{id: 1, next: 2},
@@ -42,14 +34,14 @@ defmodule FountainedgeTest do
     workflow = %Workflow{
       schema: %Schema{
         nodes: [
-          %Node{id: 1, type: Node.initial},
-          %Node{id: 2, type: Node.fork, join: 7},
+          %Node{id: 1, type: :initial},
+          %Node{id: 2, type: :fork, join: 7},
           %Node{id: 3},
           %Node{id: 4},
           %Node{id: 5},
           %Node{id: 6},
-          %Node{id: 7, type: Node.join},
-          %Node{id: 8, type: Node.final},
+          %Node{id: 7, type: :join},
+          %Node{id: 8, type: :final},
         ],
         edges: [
           %Edge{id: 1, next: 2},
@@ -101,18 +93,18 @@ defmodule FountainedgeTest do
     workflow = %Workflow{
       schema: %Schema{
         nodes: [
-          %Node{id: 1, type: Node.initial},
-          %Node{id: 2, type: Node.fork, join: 11},
-          %Node{id: 3, type: Node.fork, join: 8},
+          %Node{id: 1, type: :initial},
+          %Node{id: 2, type: :fork, join: 11},
+          %Node{id: 3, type: :fork, join: 8},
           %Node{id: 4},
           %Node{id: 5},
           %Node{id: 6},
           %Node{id: 7},
-          %Node{id: 8, type: Node.join},
+          %Node{id: 8, type: :join},
           %Node{id: 9},
           %Node{id: 10},
-          %Node{id: 11, type: Node.join},
-          %Node{id: 12, type: Node.final},
+          %Node{id: 11, type: :join},
+          %Node{id: 12, type: :final},
         ],
         edges: [
           %Edge{id: 1, next: 2},
