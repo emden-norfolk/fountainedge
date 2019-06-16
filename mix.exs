@@ -45,7 +45,7 @@ defmodule Fountainedge.MixProject do
       name: "fountainedge",
       # These are the default files included in the package
       files: ~w(lib mix.exs README.md),
-      licenses: ["Apache 2.0"],
+      licenses: ["BSD"],
       links: %{"GitHub" => "https://github.com/emden-norfolk/fountainedge"}
     ]
   end
