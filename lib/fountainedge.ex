@@ -4,7 +4,7 @@ defmodule Fountainedge do
   """
 
   alias __MODULE__, as: Workflow
-  alias Fountainedge.{Schema, Edge, State, Node, Token}
+  alias Fountainedge.{Schema, Edge, State, Node, Token, OutEdge}
 
   @enforce_keys [:schema, :states]
 
@@ -14,7 +14,7 @@ defmodule Fountainedge do
     %Workflow{workflow | states: transition(workflow.states, workflow.schema, edge)}
   end
 
-  defp transition states, %Schema{} = schema, %Edge{} = edge do
+  defp transition(states, %Schema{} = schema, %Edge{} = edge) do
     edge = Enum.find schema.edges, fn e -> e == edge end
     node = Enum.find schema.nodes, fn n -> n.id == edge.next end
     state = current_state states, edge
@@ -46,8 +46,9 @@ defmodule Fountainedge do
     |> fork_transition(schema, edges)
   end
 
-  defp fork_transition states, %Schema{} = schema, [edge | edges] do
-    transition(states, schema, edge)
+  defp fork_transition(states, %Schema{} = schema, [edge | edges]) do
+    states
+    |> transition(schema, edge)
     |> fork_transition(schema, edges)
   end
 
@@ -79,4 +80,28 @@ defmodule Fountainedge do
   end
 
   defp join_tokens(tokens, %Node{} = _origin_node, []), do: tokens
+
+  def out_edges(%Workflow{} = workflow) do
+    gather_out_edges_state(workflow, [], workflow.states)
+    |> Enum.uniq()
+  end
+
+  defp gather_out_edges_state(%Workflow{} = workflow, out_edges, [state | states]) do
+    out_edges = out_edges(workflow, state) ++ out_edges
+    gather_out_edges_state(workflow, out_edges, states)
+  end
+
+  defp gather_out_edges_state(%Workflow{} = _workflow, out_edges, []), do: out_edges
+
+  def out_edges(%Workflow{} = workflow, %State{} = state) do
+    edges = Enum.filter(workflow.schema.edges, fn edge -> edge.id == state.id end)
+    gather_out_edges([], edges)
+  end
+
+  defp gather_out_edges(out_edges, [edge | edges]) do
+    out_edge = %OutEdge{edge: edge}
+    gather_out_edges([out_edge] ++ out_edges, edges)
+  end
+
+  defp gather_out_edges(out_edges, []), do: out_edges
 end

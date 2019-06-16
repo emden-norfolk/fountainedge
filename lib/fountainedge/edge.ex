@@ -1,6 +1,6 @@
 defmodule Fountainedge.Edge do
   @moduledoc """
-  Documentation for Fountainedge.Node.
+  Documentation for Fountainedge.Edge.
   """
 
   @enforce_keys [:id, :next]
