@@ -15,8 +15,8 @@ defmodule Fountainedge do
   end
 
   defp transition(states, %Schema{} = schema, %Edge{} = edge) do
-    edge = Enum.find schema.edges, fn e -> e == edge end
-    node = Enum.find schema.nodes, fn n -> n.id == edge.next end
+    edge = Edge.find(schema.edges, edge)
+    node = Node.find(schema.nodes, edge.next)
     state = current_state states, edge
     next_state = %State{state | id: edge.next}
 
@@ -63,7 +63,7 @@ defmodule Fountainedge do
 
     if branches == Enum.count arrivals do
       join_states(states, node, origin_node, arrivals)
-      |> transition(schema, Enum.find(schema.edges, fn e -> e.id == node.id end))
+      |> transition(schema, Edge.find(schema.edges, node.id))
     else
       states
     end
@@ -95,13 +95,20 @@ defmodule Fountainedge do
 
   def out_edges(%Workflow{} = workflow, %State{} = state) do
     edges = Enum.filter(workflow.schema.edges, fn edge -> edge.id == state.id end)
-    gather_out_edges([], edges)
+    gather_out_edges(workflow, [], edges)
   end
 
-  defp gather_out_edges(out_edges, [edge | edges]) do
-    out_edge = %OutEdge{edge: edge}
-    gather_out_edges([out_edge] ++ out_edges, edges)
+  defp gather_out_edges(%Workflow{} = workflow, out_edges, [edge | edges]) do
+    node = Node.find(workflow.schema.nodes, edge.id)
+
+    disabled = case node.type do
+      :join -> true
+      _ -> false
+    end
+
+    out_edge = %OutEdge{edge: edge, disabled: disabled}
+    gather_out_edges(workflow, [out_edge] ++ out_edges, edges)
   end
 
-  defp gather_out_edges(out_edges, []), do: out_edges
+  defp gather_out_edges(%Workflow{} = _workflow, out_edges, []), do: out_edges
 end
