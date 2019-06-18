@@ -13,7 +13,7 @@ defmodule Fountainedge.Graph do
   end
 
   defp vertices(graph, vertices, [node | nodes]) do
-    {graph, vertex_id} = Graph.add_vertex(graph, Integer.to_string(node.id))
+    {graph, vertex_id} = Graph.add_vertex(graph, node.label || Integer.to_string(node.id))
     vertices(graph, [{node.id, vertex_id}] ++ vertices, nodes)
   end
 
