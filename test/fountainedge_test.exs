@@ -64,26 +64,26 @@ defmodule FountainedgeTest do
 
     workflow = Workflow.transition(workflow, %Edge{id: 1, next: 2})
     assert workflow.states == [
-      %State{id: 3, tokens: [%Token{id: 2, token: 3}]},
       %State{id: 5, tokens: [%Token{id: 2, token: 5}]},
+      %State{id: 3, tokens: [%Token{id: 2, token: 3}]},
     ]
 
     workflow = Workflow.transition(workflow, %Edge{id: 3, next: 4})
     assert workflow.states == [
-      %State{id: 5, tokens: [%Token{id: 2, token: 5}]},
       %State{id: 4, tokens: [%Token{id: 2, token: 3}]},
+      %State{id: 5, tokens: [%Token{id: 2, token: 5}]},
     ]
 
     workflow = Workflow.transition(workflow, %Edge{id: 5, next: 6})
     assert workflow.states == [
-      %State{id: 4, tokens: [%Token{id: 2, token: 3}]},
       %State{id: 6, tokens: [%Token{id: 2, token: 5}]},
+      %State{id: 4, tokens: [%Token{id: 2, token: 3}]},
     ]
 
     workflow = Workflow.transition(workflow, %Edge{id: 4, next: 7})
     assert workflow.states == [
-      %State{id: 6, tokens: [%Token{id: 2, token: 5}]},
       %State{id: 7, tokens: [%Token{id: 2, token: 3}]},
+      %State{id: 6, tokens: [%Token{id: 2, token: 5}]},
     ]
 
     workflow = Workflow.transition(workflow, %Edge{id: 6, next: 7})
@@ -133,39 +133,39 @@ defmodule FountainedgeTest do
 
     workflow = Workflow.transition(workflow, %Edge{id: 1, next: 2})
     assert workflow.states == [
-      %State{id: 4, tokens: [%Token{id: 2, token: 3}, %Token{id: 3, token: 4}]},
-      %State{id: 5, tokens: [%Token{id: 2, token: 3}, %Token{id: 3, token: 5}]},
-      %State{id: 7, tokens: [%Token{id: 2, token: 3}, %Token{id: 3, token: 7}]},
       %State{id: 9, tokens: [%Token{id: 2, token: 9}]},
+      %State{id: 7, tokens: [%Token{id: 3, token: 7}, %Token{id: 2, token: 3}]},
+      %State{id: 5, tokens: [%Token{id: 3, token: 5}, %Token{id: 2, token: 3}]},
+      %State{id: 4, tokens: [%Token{id: 3, token: 4}, %Token{id: 2, token: 3}]},
     ]
 
     workflow = Workflow.transition(workflow, %Edge{id: 4, next: 8})
     workflow = Workflow.transition(workflow, %Edge{id: 5, next: 6})
     workflow = Workflow.transition(workflow, %Edge{id: 9, next: 10})
     assert workflow.states == [
-      %State{id: 7, tokens: [%Token{id: 2, token: 3}, %Token{id: 3, token: 7}]},
-      %State{id: 8, tokens: [%Token{id: 2, token: 3}, %Token{id: 3, token: 4}]},
-      %State{id: 6, tokens: [%Token{id: 2, token: 3}, %Token{id: 3, token: 5}]},
       %State{id: 10, tokens: [%Token{id: 2, token: 9}]},
+      %State{id: 6, tokens: [%Token{id: 3, token: 5}, %Token{id: 2, token: 3}]},
+      %State{id: 8, tokens: [%Token{id: 3, token: 4}, %Token{id: 2, token: 3}]},
+      %State{id: 7, tokens: [%Token{id: 3, token: 7}, %Token{id: 2, token: 3}]},
     ]
 
     workflow = Workflow.transition(workflow, %Edge{id: 6, next: 8})
     assert workflow.states == [
-      %State{id: 7, tokens: [%Token{id: 2, token: 3}, %Token{id: 3, token: 7}]},
-      %State{id: 8, tokens: [%Token{id: 2, token: 3}, %Token{id: 3, token: 4}]},
+      %State{id: 8, tokens: [%Token{id: 3, token: 5}, %Token{id: 2, token: 3}]},
       %State{id: 10, tokens: [%Token{id: 2, token: 9}]},
-      %State{id: 8, tokens: [%Token{id: 2, token: 3}, %Token{id: 3, token: 5}]},
+      %State{id: 8, tokens: [%Token{id: 3, token: 4}, %Token{id: 2, token: 3}]},
+      %State{id: 7, tokens: [%Token{id: 3, token: 7}, %Token{id: 2, token: 3}]},
     ]
     assert Workflow.out_edges(workflow) == [
+      %OutEdge{edge: %Edge{id: 7, next: 8}},
       %OutEdge{edge: %Edge{id: 8, next: 11}, disabled: true},
       %OutEdge{edge: %Edge{id: 10, next: 11}},
-      %OutEdge{edge: %Edge{id: 7, next: 8}},
     ]
 
     workflow = Workflow.transition(workflow, %Edge{id: 7, next: 8})
     assert workflow.states == [
-      %State{id: 10, tokens: [%Token{id: 2, token: 9}]},
       %State{id: 11, tokens: [%Token{id: 2, token: 3}]},
+      %State{id: 10, tokens: [%Token{id: 2, token: 9}]},
     ]
 
     workflow = Workflow.transition(workflow, %Edge{id: 10, next: 11})

@@ -20,7 +20,7 @@ defmodule Fountainedge do
     state = current_state states, edge
     next_state = %State{state | id: edge.next}
 
-    states = Enum.reject(states, fn s -> s == state end) ++ [next_state]
+    states = [next_state | Enum.reject(states, fn s -> s == state end)]
     case node.type do
       :fork -> fork states, schema, node, next_state
       :join -> join states, schema, node
@@ -38,7 +38,7 @@ defmodule Fountainedge do
     edges = Enum.filter schema.edges, fn e -> e.id == node.id end
     forked_states = Enum.reduce edges, [], fn edge, acc ->
       token = %Token{id: edge.id, token: edge.next}
-      tokens = next_state.tokens ++ [token]
+      tokens = [token | next_state.tokens]
       [%State{next_state | tokens: tokens} | acc]
     end
 
@@ -71,7 +71,7 @@ defmodule Fountainedge do
 
   defp join_states states, %Node{} = node, %Node{} = origin_node, arrivals do
     tokens = Enum.uniq join_tokens [], origin_node, arrivals
-    (states -- arrivals) ++ [%State{id: node.id, tokens: tokens}]
+    [%State{id: node.id, tokens: tokens} | states -- arrivals]
   end
 
   defp join_tokens tokens,  %Node{} = origin_node, [state | arrivals] do
@@ -107,7 +107,7 @@ defmodule Fountainedge do
     end
 
     out_edge = %OutEdge{edge: edge, disabled: disabled}
-    gather_out_edges(workflow, [out_edge] ++ out_edges, edges)
+    gather_out_edges(workflow, [out_edge | out_edges], edges)
   end
 
   defp gather_out_edges(%Workflow{} = _workflow, out_edges, []), do: out_edges
