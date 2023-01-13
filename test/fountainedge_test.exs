@@ -3,7 +3,7 @@ defmodule FountainedgeTest do
   doctest Fountainedge
 
   alias Fountainedge, as: Workflow
-  alias Fountainedge.{Schema, Node, Edge, State, Token, OutEdge}
+  alias Fountainedge.{Schema, Node, Edge, State, Token, OutEdge, Graph}
 
   test "can compute transitions" do
     workflow = %Workflow{
@@ -31,6 +31,9 @@ defmodule FountainedgeTest do
     assert workflow.states == [%State{id: 3}]
 
     assert Workflow.out_edges(workflow, %State{id: 2}) == [%OutEdge{edge: %Edge{id: 2, next: 1}}, %OutEdge{edge: %Edge{id: 2, next: 3}}]
+
+    Graph.graph(workflow)
+    |> Graphvix.Graph.compile("test1")
   end
 
   test "can compute forks and joins" do
@@ -90,6 +93,9 @@ defmodule FountainedgeTest do
     assert workflow.states == [
       %State{id: 8},
     ]
+
+    Graph.graph(workflow)
+    |> Graphvix.Graph.compile("test2")
   end
 
   test "nested forks and joins" do
@@ -172,5 +178,8 @@ defmodule FountainedgeTest do
     assert workflow.states == [
       %State{id: 12},
     ]
+
+    Graph.graph(workflow)
+    |> Graphvix.Graph.compile("test3")
   end
 end
