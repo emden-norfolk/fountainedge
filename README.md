@@ -7,6 +7,8 @@ Nodes (vertices) and edges (links.) Uses tokens.
 
 This API is currently experimental (version 0.) A stable API will be released under version 1.
 
+Uses [Graphviz](https://graphviz.org/) for graphical representations.
+
 ## Installation
 
 If [available in Hex](https://hex.pm/docs/publish), the package can be installed
