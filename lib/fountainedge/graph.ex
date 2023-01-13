@@ -13,7 +13,30 @@ defmodule Fountainedge.Graph do
   end
 
   defp vertices(graph, vertices, [node | nodes]) do
-    {graph, vertex_id} = Graph.add_vertex(graph, node.label || Integer.to_string(node.id))
+
+    # TODO Why is simple logic so difficult in Elixir?
+    {label, attributes} = if node.type == :fork or node.type == :join do
+      {
+        nil,
+        [
+          shape: "box",
+          style: "filled",
+          fillcolor: "black",
+          height: 0.05,
+          width: 1.5,
+          fixedsize: "true",
+        ]
+      }
+    else
+      {
+        node.label || Integer.to_string(node.id),
+        [
+          shape: "square",
+        ]
+      }
+    end
+
+    {graph, vertex_id} = Graph.add_vertex(graph, label, attributes)
     vertices(graph, [{node.id, vertex_id}] ++ vertices, nodes)
   end
 
