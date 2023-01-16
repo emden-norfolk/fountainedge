@@ -16,7 +16,7 @@ BEGIN {
     for (i=0; i<N; i++){              // for each node in this rank (w/ same Y/X pos)
       j=nodeIndx[i];
       aNode=thisNode[j];
-      print (aNode.name, " ", R);
+      print (aNode.name, " ", aNode.id, " ", R);
     }
   }
 }

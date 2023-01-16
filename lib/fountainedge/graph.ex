@@ -19,6 +19,7 @@ defmodule Fountainedge.Graph do
       {
         nil,
         [
+          id: node.id,
           shape: "box",
           style: "filled",
           fillcolor: "black",
@@ -31,6 +32,7 @@ defmodule Fountainedge.Graph do
       {
         node.label || Integer.to_string(node.id),
         [
+          id: node.id,
           shape: "square",
         ]
       }
