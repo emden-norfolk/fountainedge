@@ -1,0 +1,48 @@
+// @link https://stackoverflow.com/questions/57222372/how-to-get-rank-of-nodes-after-processing-with-graphviz-dot
+// dot -Tdot test1.dot | gvpr -f rank.gvpr
+BEGIN {
+  int i, j, N, R=0,  nIndx=0, list[string];
+  string rankList[double];
+  string nodeIndx[int];
+  string str1, RankDir="TB"; 
+  node_t aNode, thisNode[];
+  double dist;
+
+  void setRank(){
+    R++;
+    str1=substr(rankList[dist],1);     // strip leading delimiter
+    unset(nodeIndx);                      // delete array of node indices
+    N=split(str1, nodeIndx, "|");
+    for (i=0; i<N; i++){              // for each node in this rank (w/ same Y/X pos)
+      j=nodeIndx[i];
+      aNode=thisNode[j];
+      print (aNode.name, " ", R);
+    }
+  }
+}
+BEG_G{
+  if (hasAttr($G, "rankdir") && $G.rankdir!="")
+    RankDir=$G.rankdir;
+}
+N {
+  thisNode[++nIndx]=$;  // index the nodes
+  if (RankDir=="LR|RL"){        // ksh pattern matching
+    dist=$.X;
+  } else {
+    dist=$.Y;
+  }
+  // build a string containing all node indices, based on (indexed by) Y/X value
+  rankList[dist]=sprintf("%s|%s", rankList[dist], nIndx);
+}
+END_G{
+  // for each rank, in sorted order
+  if (RankDir=="TB|RL"){        //      ksh pattern matching
+    forr (rankList[dist]){      //  decreasing sort
+      setRank();
+    }
+  }else{
+    for (rankList[dist]){       // increasing sort
+      setRank();
+    }
+  }
+}
