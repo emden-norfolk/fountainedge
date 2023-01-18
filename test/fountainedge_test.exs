@@ -34,6 +34,14 @@ defmodule FountainedgeTest do
 
     Graph.graph(workflow)
     |> Graphvix.Graph.compile("test1")
+
+    workflow = Graph.rank(workflow, "test1")
+
+    assert workflow.schema.nodes == [
+      %Fountainedge.Node{id: 1, rank: 1, type: :initial},
+      %Fountainedge.Node{id: 2, rank: 2},
+      %Fountainedge.Node{id: 3, rank: 3, type: :final}
+    ]
   end
 
   test "can compute forks and joins" do
