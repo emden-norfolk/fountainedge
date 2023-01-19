@@ -4,6 +4,7 @@ defmodule Fountainedge do
   """
 
   # TODO Move most of this into a Workflow module.
+  # This would be breaking compatibility, so only do this for version 1 release.
 
   alias __MODULE__, as: Workflow
   alias Fountainedge.{Schema, Edge, State, Node, Token, OutEdge}
