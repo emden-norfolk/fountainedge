@@ -5,6 +5,10 @@ defmodule FountainedgeTest do
   alias Fountainedge, as: Workflow
   alias Fountainedge.{Schema, Node, Edge, State, Token, OutEdge, Graph}
 
+  test "can compute ranks" do
+    # TODO Separate schema from workflow.
+  end
+
   test "can compute transitions" do
     workflow = %Workflow{
       schema: %Schema{
