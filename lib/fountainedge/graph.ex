@@ -27,7 +27,9 @@ defmodule Fountainedge.Graph do
     #port_dot = Port.open({:spawn, "dot -Tdot #{filename}.dot "}, [:binary])
     # port_gvpr = Port.open({:spawn, "gvpr -f rank.gvpr"}, [:binary])
 
-    ranking = :os.cmd(:"dot -Tdot #{filename}.dot | gvpr -f rank.gvpr")
+    filename_rank_gvpr = to_string(:code.priv_dir(:fountainedge)) <> "/rank.gvpr"
+
+    ranking = :os.cmd(:"dot -Tdot #{filename}.dot | gvpr -f #{filename_rank_gvpr}")
               |> to_string
               |> String.split("\n")
               |> Enum.map(fn line -> String.split line end)

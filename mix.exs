@@ -6,7 +6,7 @@ defmodule Fountainedge.MixProject do
       app: :fountainedge,
       name: "Fountainedge",
       organization: "Emden Norfolk Computing Systems",
-      version: "0.1.6",
+      version: "0.1.7",
       elixir: "~> 1.8",
       start_permanent: Mix.env() == :prod,
       description: description(),
@@ -44,7 +44,7 @@ defmodule Fountainedge.MixProject do
       # This option is only needed when you don't want to use the OTP application name
       name: "fountainedge",
       # These are the default files included in the package
-      files: ~w(lib mix.exs README.md),
+      files: ~w(lib mix.exs priv README.md),
       licenses: ["BSD"],
       links: %{"GitHub" => "https://github.com/emden-norfolk/fountainedge"}
     ]
