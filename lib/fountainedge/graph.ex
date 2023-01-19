@@ -8,9 +8,13 @@ defmodule Fountainedge.Graph do
   alias Fountainedge, as: Workflow
 
   def graph(%Workflow{} = workflow) do
+    graph(workflow.schema)
+  end
+
+  def graph(%Schema{} = schema) do
     graph = Graph.new()
-    {graph, vertices} = vertices(graph, [], workflow.schema.nodes)
-    edges(graph, vertices, workflow.schema.edges)
+    {graph, vertices} = vertices(graph, [], schema.nodes)
+    edges(graph, vertices, schema.edges)
   end
 
   def rank(%Workflow{} = workflow, filename) do
