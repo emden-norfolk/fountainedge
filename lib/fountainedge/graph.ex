@@ -19,17 +19,17 @@ defmodule Fountainedge.Graph do
     # port_gvpr = Port.open({:spawn, "gvpr -f rank.gvpr"}, [:binary])
 
     ranking = :os.cmd(:"dot -Tdot #{filename}.dot | gvpr -f rank.gvpr")
-    |> to_string
-    |> String.split("\n")
-    |> Enum.map(fn line -> String.split line end)
-    |> Enum.filter(fn row -> !Enum.empty? row end)
-    |> Enum.map(fn row ->
-      {id, _} = Integer.parse Enum.at(row, 1)
-      {rank, _} = Integer.parse Enum.at(row, 2)
-      node = Fountainedge.Node.find(workflow.schema.nodes, id)
-      %{node | rank: rank}
-    end)
-    |> Enum.sort(&(&1.id < &2.id))
+              |> to_string
+              |> String.split("\n")
+              |> Enum.map(fn line -> String.split line end)
+              |> Enum.filter(fn row -> !Enum.empty? row end)
+              |> Enum.map(fn row ->
+                {id, _} = Integer.parse Enum.at(row, 1)
+                {rank, _} = Integer.parse Enum.at(row, 2)
+                node = Fountainedge.Node.find(workflow.schema.nodes, id)
+                %{node | rank: rank}
+              end)
+              |> Enum.sort(&(&1.id < &2.id))
 
     put_in(workflow.schema.nodes, ranking)
   end
