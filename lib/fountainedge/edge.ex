@@ -7,7 +7,7 @@ defmodule Fountainedge.Edge do
 
   @enforce_keys [:id, :next]
 
-  defstruct id: nil, next: nil
+  defstruct id: nil, next: nil, attributes: []
 
   def find(edges, %Edge{} = edge) do
     Enum.find(edges, fn e -> e == edge end)

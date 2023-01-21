@@ -71,6 +71,9 @@ defmodule Fountainedge.Graph do
       }
     end
 
+    # Apply custom node attributes.
+    attributes = attributes ++ node.attributes
+
     {graph, vertex_id} = Graph.add_vertex(graph, label, attributes)
     vertices(graph, [{node.id, vertex_id}] ++ vertices, nodes)
   end
@@ -81,7 +84,7 @@ defmodule Fountainedge.Graph do
     {_, current} = List.keyfind(vertices, edge.id, 0)
     {_, next} = List.keyfind(vertices, edge.next, 0)
 
-    {graph, _edge_id} = Graph.add_edge(graph, current, next)
+    {graph, _edge_id} = Graph.add_edge(graph, current, next, edge.attributes)
     edges(graph, vertices, edges)
   end
 
