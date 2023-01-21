@@ -21,6 +21,8 @@ defmodule Fountainedge do
 
   The current nodes are tracked as a state, and parallel
   processess are tracked using tokens.
+
+  A valid out edge must be given.
   """
   def transition %Workflow{} = workflow, %Edge{} = edge do
     %Workflow{workflow | states: transition(workflow.states, workflow.schema, edge)}
@@ -94,9 +96,11 @@ defmodule Fountainedge do
   defp join_tokens(tokens, %Node{} = _origin_node, []), do: tokens
 
   @doc """
-  List of out edges that are valid transitions.
+  Returns a list of out edges that are valid transitions.
 
-  Pass the edge into `transition`.
+  The out edge is an edge leading out of a current node.
+
+  Then pass the chosen edge into `Fountainedge.transition/2`.
   """
   def out_edges(%Workflow{} = workflow) do
     gather_out_edges_state(workflow, [], workflow.states)
