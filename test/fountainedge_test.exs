@@ -13,9 +13,9 @@ defmodule FountainedgeTest do
     workflow = %Workflow{
       schema: %Schema{
         nodes: [
-          %Node{id: 1, type: :initial},
-          %Node{id: 2},
-          %Node{id: 3, type: :final},
+          %Node{id: 1, label: "First", type: :initial},
+          %Node{id: 2, label: "Second"},
+          %Node{id: 3, label: "Third", type: :final},
         ],
         edges: [
           %Edge{id: 1, next: 2},
@@ -42,9 +42,9 @@ defmodule FountainedgeTest do
     workflow = Graph.rank(workflow, "test1")
 
     assert workflow.schema.nodes == [
-      %Fountainedge.Node{id: 1, rank: 1, type: :initial},
-      %Fountainedge.Node{id: 2, rank: 2},
-      %Fountainedge.Node{id: 3, rank: 3, type: :final}
+      %Fountainedge.Node{id: 1, label: "First", rank: 1, type: :initial},
+      %Fountainedge.Node{id: 2, label: "Second", rank: 2},
+      %Fountainedge.Node{id: 3, label: "Third", rank: 3, type: :final}
     ]
   end
 

@@ -56,8 +56,8 @@ defmodule Fountainedge.Graph do
           shape: "box",
           style: "filled",
           fillcolor: "black",
-          height: 0.05,
-          width: 1.5,
+          height: 0.1,
+          width: 2,
           fixedsize: "true",
         ]
       }
@@ -66,7 +66,7 @@ defmodule Fountainedge.Graph do
         node.label || Integer.to_string(node.id),
         [
           id: node.id,
-          shape: "square",
+          shape: "box",
         ]
       }
     end
