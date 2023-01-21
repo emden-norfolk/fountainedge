@@ -34,7 +34,10 @@ defmodule FountainedgeTest do
     # First transition.
     workflow = Workflow.transition(workflow, %Edge{id: 1, next: 2})
     assert workflow.states == [%State{id: 2}]
-    assert Workflow.out_edges(workflow) == [%OutEdge{edge: %Edge{id: 2, next: 1}}, %OutEdge{edge: %Edge{id: 2, next: 3}}]
+    assert Workflow.out_edges(workflow) == [
+      %OutEdge{edge: %Edge{id: 2, next: 1}},
+      %OutEdge{edge: %Edge{id: 2, next: 3}}
+    ]
 
     # Second transition.
     workflow = Workflow.transition(workflow, %Edge{id: 2, next: 3})
@@ -90,6 +93,10 @@ defmodule FountainedgeTest do
     assert workflow.states == [
       %State{id: 5, tokens: [%Token{id: 2, token: 5}]},
       %State{id: 3, tokens: [%Token{id: 2, token: 3}]},
+    ]
+    assert Workflow.out_edges(workflow) == [
+      %OutEdge{edge: %Edge{id: 3, next: 4}},
+      %OutEdge{edge: %Edge{id: 5, next: 6}}
     ]
 
     workflow = Workflow.transition(workflow, %Edge{id: 3, next: 4})
