@@ -1,6 +1,6 @@
 defmodule Fountainedge.OutEdge do
   @moduledoc """
-  Documentation for Fountainedge.OutEdge.
+  Defines a valid out edge.
   """
 
   @enforce_keys [:edge]

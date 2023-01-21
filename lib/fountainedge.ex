@@ -1,6 +1,9 @@
 defmodule Fountainedge do
   @moduledoc """
   Workflow engine.
+
+  A basic understanding of graph theory
+  would elucidate an intuitive grasp of this package.
   """
 
   # TODO Move most of this into a Workflow module.

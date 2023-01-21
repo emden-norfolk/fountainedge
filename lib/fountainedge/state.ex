@@ -1,6 +1,6 @@
 defmodule Fountainedge.State do
   @moduledoc """
-  Documentation for Fountainedge.State.
+  Tracks the current stateful progression of the workflow.
   """
 
   @enforce_keys [:id]

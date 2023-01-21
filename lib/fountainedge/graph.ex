@@ -1,12 +1,19 @@
 defmodule Fountainedge.Graph do
   @moduledoc """
-  Documentation for Fountainedge.Graph.
+  Graphing functions.
   """
 
   alias Graphvix.Graph
   alias Fountainedge.Schema
   alias Fountainedge, as: Workflow
 
+  @doc """
+  Graphs a schema as a [UML](https://www.omg.org/spec/UML/)
+  Activity Diagram using [Graphviz](https://graphviz.org/).
+
+  If given a workflow, the graph will be decorationed with stateful
+  information such as the current node (or nodes.)
+  """
   def graph(%Workflow{} = workflow) do
     graph(workflow.schema)
   end
@@ -17,6 +24,17 @@ defmodule Fountainedge.Graph do
     edges(graph, vertices, schema.edges)
   end
 
+  @doc """
+  Ranks all nodes in a given schema.
+
+  [`dot`](https://graphviz.org/docs/layouts/dot/) creates hierarchical
+  or layered drawings of directed graphs. A ranking algorithmn is used
+  to determine this heirarchy. It may be useful to use these ranks
+  when determining direction in a workflow. Call this function to
+  calculate ranks per each node.
+
+  Will set the `rank` field on each `Fountainedge.Node` within the schema.
+  """
   def rank(%Workflow{} = workflow, filename) do
     %{workflow | schema: rank(workflow.schema, filename)}
   end

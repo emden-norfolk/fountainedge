@@ -1,8 +1,6 @@
 defmodule Fountainedge.Edge do
   @moduledoc """
   A graph edge directionally links two nodes together.
-  A basic understanding of graph theory
-  would elucidate an intuitive grasp of this module.
 
   Edges are fundamental to the concept of transitioning between
   nodes.

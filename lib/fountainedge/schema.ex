@@ -1,6 +1,7 @@
 defmodule Fountainedge.Schema do
   @moduledoc """
-  Documentation for Fountainedge.Schema.
+  The schema models the underlying stateless structure of
+  a workflow as a graph consisting of nodes and edges.
   """
 
   @enforce_keys [:nodes, :edges]
