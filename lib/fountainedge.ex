@@ -1,6 +1,6 @@
 defmodule Fountainedge do
   @moduledoc """
-  Documentation for Fountainedge.
+  Workflow engine.
   """
 
   # TODO Move most of this into a Workflow module.
@@ -13,6 +13,9 @@ defmodule Fountainedge do
 
   defstruct schema: %Schema{nodes: [], edges: []}, states: []
 
+  @doc """
+  Transition between nodes along an edge and progress the token.
+  """
   def transition %Workflow{} = workflow, %Edge{} = edge do
     %Workflow{workflow | states: transition(workflow.states, workflow.schema, edge)}
   end
@@ -84,6 +87,11 @@ defmodule Fountainedge do
 
   defp join_tokens(tokens, %Node{} = _origin_node, []), do: tokens
 
+  @doc """
+  List of out edges that are valid transitions.
+
+  Pass the edge into `transition`.
+  """
   def out_edges(%Workflow{} = workflow) do
     gather_out_edges_state(workflow, [], workflow.states)
     |> Enum.uniq()
@@ -96,7 +104,10 @@ defmodule Fountainedge do
 
   defp gather_out_edges_state(%Workflow{} = _workflow, out_edges, []), do: out_edges
 
-  def out_edges(%Workflow{} = workflow, %State{} = state) do
+  # TODO remove?
+  # This has been made private. May be able to remove entirely?
+  # No need to pass in state as a client, should be internal.
+  defp out_edges(%Workflow{} = workflow, %State{} = state) do
     edges = Enum.filter(workflow.schema.edges, fn edge -> edge.id == state.id end)
     gather_out_edges(workflow, [], edges)
   end

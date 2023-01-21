@@ -1,6 +1,15 @@
 defmodule Fountainedge.Edge do
   @moduledoc """
-  Documentation for Fountainedge.Edge.
+  A graph edge directionally links two nodes together.
+  A basic understanding of graph theory
+  would elucidate an intuitive grasp of this module.
+
+  Edges are fundamental to the concept of transitioning between
+  nodes.
+
+  [Graphviz](https://graphviz.org/)
+  is used for presentation and ranking of graph nodes.
+  See `Graphvix.Graph.add_edge/4`.
   """
 
   alias __MODULE__

@@ -10,6 +10,7 @@ defmodule FountainedgeTest do
   end
 
   test "can compute transitions" do
+    # Initial state.
     workflow = %Workflow{
       schema: %Schema{
         nodes: [
@@ -27,15 +28,20 @@ defmodule FountainedgeTest do
         %State{id: 1},
       ],
     }
+    assert workflow.states == [%State{id: 1}]
+    assert Workflow.out_edges(workflow) == [%OutEdge{edge: %Edge{id: 1, next: 2}}]
 
+    # First transition.
     workflow = Workflow.transition(workflow, %Edge{id: 1, next: 2})
     assert workflow.states == [%State{id: 2}]
+    assert Workflow.out_edges(workflow) == [%OutEdge{edge: %Edge{id: 2, next: 1}}, %OutEdge{edge: %Edge{id: 2, next: 3}}]
 
+    # Second transition.
     workflow = Workflow.transition(workflow, %Edge{id: 2, next: 3})
     assert workflow.states == [%State{id: 3}]
+    assert Workflow.out_edges(workflow) == []
 
-    assert Workflow.out_edges(workflow, %State{id: 2}) == [%OutEdge{edge: %Edge{id: 2, next: 1}}, %OutEdge{edge: %Edge{id: 2, next: 3}}]
-
+    # Graphing.
     Graph.graph(workflow)
     |> Graphvix.Graph.compile("test1")
 

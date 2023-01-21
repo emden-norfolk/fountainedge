@@ -1,6 +1,11 @@
 defmodule Fountainedge.Node do
   @moduledoc """
-  Documentation for Fountainedge.Node.
+  A graph node (also known as a vertex.) A basic understanding of graph theory
+  would elucidate an intuitive grasp of this module.
+
+  [Graphviz](https://graphviz.org/)
+  is used for presentation and ranking of graph nodes.
+  See `Graphvix.Graph.add_vertex/3`.
   """
 
   @enforce_keys [:id]
