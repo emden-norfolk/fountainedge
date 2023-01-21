@@ -11,6 +11,10 @@ defmodule Fountainedge.Node do
 
   defstruct id: nil, type: :normal, join: nil, label: nil, rank: nil, attributes: []
 
+  @doc """
+  Find a matching node in a list (used internally.)
+  """
+  # TODO Is this really that useful? Access the list directly instead?
   def find(nodes, id) do
     Enum.find(nodes, fn node -> node.id == id end)
   end
