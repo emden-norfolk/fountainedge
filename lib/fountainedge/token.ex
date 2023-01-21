@@ -1,6 +1,7 @@
 defmodule Fountainedge.Token do
   @moduledoc """
-  Documentation for Fountainedge.Token.
+  Tokens track parallel progression from a fork
+  to a join.
   """
 
   @enforce_keys [:id, :token]

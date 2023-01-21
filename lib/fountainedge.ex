@@ -14,7 +14,10 @@ defmodule Fountainedge do
   defstruct schema: %Schema{nodes: [], edges: []}, states: []
 
   @doc """
-  Transition between nodes along an edge and progress the token.
+  Transition between nodes along an edge.
+
+  The current nodes are tracked as a state, and parallel
+  processess are tracked using tokens.
   """
   def transition %Workflow{} = workflow, %Edge{} = edge do
     %Workflow{workflow | states: transition(workflow.states, workflow.schema, edge)}

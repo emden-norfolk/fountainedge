@@ -55,6 +55,7 @@ defmodule FountainedgeTest do
   end
 
   test "can compute forks and joins" do
+    # Initial state.
     workflow = %Workflow{
       schema: %Schema{
         nodes: [
@@ -82,6 +83,8 @@ defmodule FountainedgeTest do
         %State{id: 1},
       ],
     }
+    assert workflow.states == [%State{id: 1}]
+    assert Workflow.out_edges(workflow) == [%OutEdge{edge: %Edge{id: 1, next: 2}}]
 
     workflow = Workflow.transition(workflow, %Edge{id: 1, next: 2})
     assert workflow.states == [
