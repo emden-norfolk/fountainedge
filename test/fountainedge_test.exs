@@ -89,6 +89,7 @@ defmodule FountainedgeTest do
     assert workflow.states == [%State{id: 1}]
     assert Workflow.out_edges(workflow) == [%OutEdge{edge: %Edge{id: 1, next: 2}}]
 
+    # 1 -> 2 (fork)
     workflow = Workflow.transition(workflow, %Edge{id: 1, next: 2})
     assert workflow.states == [
       %State{id: 5, tokens: [%Token{id: 2, token: 5}]},
@@ -99,29 +100,47 @@ defmodule FountainedgeTest do
       %OutEdge{edge: %Edge{id: 5, next: 6}}
     ]
 
+    # 3 -> 4
     workflow = Workflow.transition(workflow, %Edge{id: 3, next: 4})
     assert workflow.states == [
       %State{id: 4, tokens: [%Token{id: 2, token: 3}]},
       %State{id: 5, tokens: [%Token{id: 2, token: 5}]},
     ]
+    assert Workflow.out_edges(workflow) == [
+      %OutEdge{edge: %Edge{id: 5, next: 6}},
+      %OutEdge{edge: %Edge{id: 4, next: 7}},
+    ]
 
+    # 5 -> 6
     workflow = Workflow.transition(workflow, %Edge{id: 5, next: 6})
     assert workflow.states == [
       %State{id: 6, tokens: [%Token{id: 2, token: 5}]},
       %State{id: 4, tokens: [%Token{id: 2, token: 3}]},
     ]
+    assert Workflow.out_edges(workflow) == [
+      %OutEdge{edge: %Edge{id: 4, next: 7}},
+      %OutEdge{edge: %Edge{id: 6, next: 7}},
+    ]
 
+    # 4 -> 7 (join)
     workflow = Workflow.transition(workflow, %Edge{id: 4, next: 7})
     assert workflow.states == [
       %State{id: 7, tokens: [%Token{id: 2, token: 3}]},
       %State{id: 6, tokens: [%Token{id: 2, token: 5}]},
     ]
+    assert Workflow.out_edges(workflow) == [
+      %OutEdge{edge: %Edge{id: 6, next: 7}},
+      %OutEdge{disabled: true, edge: %Edge{id: 7, next: 8}}
+    ]
 
+    # 6 -> 7 (join)
     workflow = Workflow.transition(workflow, %Edge{id: 6, next: 7})
     assert workflow.states == [
       %State{id: 8},
     ]
+    assert Workflow.out_edges(workflow) == []
 
+    # Graphing.
     Graph.graph(workflow)
     |> Graphvix.Graph.compile("test2")
   end
