@@ -10,7 +10,7 @@ defmodule Fountainedge do
   # This would be breaking compatibility, so only do this for version 1 release.
 
   alias __MODULE__, as: Workflow
-  alias Fountainedge.{Schema, Edge, State, Node, Token, OutEdge}
+  alias Fountainedge.{Schema, Edge, State, Node, Token}
 
   @enforce_keys [:schema, :states]
 
@@ -25,11 +25,14 @@ defmodule Fountainedge do
   A valid out edge must be given.
   """
   def transition %Workflow{} = workflow, %Edge{} = edge do
+    edge = Edge.find(out_edges(workflow), edge)
+    if edge == nil do
+      raise "Invalid out edge given for transition."
+    end
     %Workflow{workflow | states: transition(workflow.states, workflow.schema, edge)}
   end
 
   defp transition(states, %Schema{} = schema, %Edge{} = edge) do
-    edge = Edge.find(schema.edges, edge)
     node = Node.find(schema.nodes, edge.next)
     state = current_state states, edge
     next_state = %State{state | id: edge.next}
@@ -114,9 +117,6 @@ defmodule Fountainedge do
 
   defp gather_out_edges_state(%Workflow{} = _workflow, out_edges, []), do: out_edges
 
-  # TODO remove?
-  # This has been made private. May be able to remove entirely?
-  # No need to pass in state as a client, should be internal.
   defp out_edges(%Workflow{} = workflow, %State{} = state) do
     edges = Enum.filter(workflow.schema.edges, fn edge -> edge.id == state.id end)
     gather_out_edges(workflow, [], edges)
@@ -125,13 +125,10 @@ defmodule Fountainedge do
   defp gather_out_edges(%Workflow{} = workflow, out_edges, [edge | edges]) do
     node = Node.find(workflow.schema.nodes, edge.id)
 
-    disabled = case node.type do
-      :join -> true
-      _ -> false
+    case node.type do
+      :join -> gather_out_edges(workflow, out_edges, edges)
+      _ -> gather_out_edges(workflow, [edge | out_edges], edges)
     end
-
-    out_edge = %OutEdge{edge: edge, disabled: disabled}
-    gather_out_edges(workflow, [out_edge | out_edges], edges)
   end
 
   defp gather_out_edges(%Workflow{} = _workflow, out_edges, []), do: out_edges

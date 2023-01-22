@@ -3,7 +3,7 @@ defmodule FountainedgeTest do
   doctest Fountainedge
 
   alias Fountainedge, as: Workflow
-  alias Fountainedge.{Schema, Node, Edge, State, Token, OutEdge, Graph}
+  alias Fountainedge.{Schema, Node, Edge, State, Token, Graph}
 
   test "can compute ranks" do
     # TODO Separate schema from workflow.
@@ -29,14 +29,14 @@ defmodule FountainedgeTest do
       ],
     }
     assert workflow.states == [%State{id: 1}]
-    assert Workflow.out_edges(workflow) == [%OutEdge{edge: %Edge{id: 1, next: 2}}]
+    assert Workflow.out_edges(workflow) == [%Edge{id: 1, next: 2}]
 
     # First transition.
     workflow = Workflow.transition(workflow, %Edge{id: 1, next: 2})
     assert workflow.states == [%State{id: 2}]
     assert Workflow.out_edges(workflow) == [
-      %OutEdge{edge: %Edge{id: 2, next: 1}},
-      %OutEdge{edge: %Edge{id: 2, next: 3}}
+      %Edge{id: 2, next: 1},
+      %Edge{id: 2, next: 3}
     ]
 
     # Second transition.
@@ -87,7 +87,7 @@ defmodule FountainedgeTest do
       ],
     }
     assert workflow.states == [%State{id: 1}]
-    assert Workflow.out_edges(workflow) == [%OutEdge{edge: %Edge{id: 1, next: 2}}]
+    assert Workflow.out_edges(workflow) == [%Edge{id: 1, next: 2}]
 
     # 1 -> 2 (fork)
     workflow = Workflow.transition(workflow, %Edge{id: 1, next: 2})
@@ -96,8 +96,8 @@ defmodule FountainedgeTest do
       %State{id: 3, tokens: [%Token{id: 2, token: 3}]},
     ]
     assert Workflow.out_edges(workflow) == [
-      %OutEdge{edge: %Edge{id: 3, next: 4}},
-      %OutEdge{edge: %Edge{id: 5, next: 6}}
+      %Edge{id: 3, next: 4},
+      %Edge{id: 5, next: 6},
     ]
 
     # 3 -> 4
@@ -107,8 +107,8 @@ defmodule FountainedgeTest do
       %State{id: 5, tokens: [%Token{id: 2, token: 5}]},
     ]
     assert Workflow.out_edges(workflow) == [
-      %OutEdge{edge: %Edge{id: 5, next: 6}},
-      %OutEdge{edge: %Edge{id: 4, next: 7}},
+      %Edge{id: 5, next: 6},
+      %Edge{id: 4, next: 7},
     ]
 
     # 5 -> 6
@@ -118,8 +118,8 @@ defmodule FountainedgeTest do
       %State{id: 4, tokens: [%Token{id: 2, token: 3}]},
     ]
     assert Workflow.out_edges(workflow) == [
-      %OutEdge{edge: %Edge{id: 4, next: 7}},
-      %OutEdge{edge: %Edge{id: 6, next: 7}},
+      %Edge{id: 4, next: 7},
+      %Edge{id: 6, next: 7},
     ]
 
     # 4 -> 7 (join)
@@ -129,9 +129,13 @@ defmodule FountainedgeTest do
       %State{id: 6, tokens: [%Token{id: 2, token: 5}]},
     ]
     assert Workflow.out_edges(workflow) == [
-      %OutEdge{edge: %Edge{id: 6, next: 7}},
-      %OutEdge{disabled: true, edge: %Edge{id: 7, next: 8}}
+      %Edge{id: 6, next: 7},
     ]
+
+    # Try something invalid, like going ahead too soon before the other token has joined.
+    assert_raise RuntimeError, "Invalid out edge given for transition.", fn ->
+      Workflow.transition(workflow, %Edge{id: 7, next: 8})
+    end
 
     # 6 -> 7 (join)
     workflow = Workflow.transition(workflow, %Edge{id: 6, next: 7})
@@ -210,9 +214,8 @@ defmodule FountainedgeTest do
       %State{id: 7, tokens: [%Token{id: 3, token: 7}, %Token{id: 2, token: 3}]},
     ]
     assert Workflow.out_edges(workflow) == [
-      %OutEdge{edge: %Edge{id: 7, next: 8}},
-      %OutEdge{edge: %Edge{id: 8, next: 11}, disabled: true},
-      %OutEdge{edge: %Edge{id: 10, next: 11}},
+      %Edge{id: 7, next: 8},
+      %Edge{id: 10, next: 11},
     ]
 
     workflow = Workflow.transition(workflow, %Edge{id: 7, next: 8})
