@@ -59,8 +59,8 @@ defmodule FountainedgeTest do
     |> Graphvix.Graph.compile("test1", :png)
 
     # Ranking.
-    workflow = Graph.rank(workflow, "test1")
-    assert workflow.schema.nodes == [
+    schema = Graph.rank(workflow.schema, "test1")
+    assert schema.nodes == [
       %Node{id: 1, label: "First", rank: 1, type: :initial},
       %Node{id: 2, label: "Second", rank: 2},
       %Node{id: 3, label: "Third", rank: 3, type: :final}
@@ -392,7 +392,7 @@ defmodule FountainedgeTest do
     Graph.graph(workflow)
     |> Graphvix.Graph.compile("test4")
 
-    Graph.rank(workflow, "test4")
+    Graph.rank(schema, "test4")
   end
 
   test "can compute decision transitions" do
