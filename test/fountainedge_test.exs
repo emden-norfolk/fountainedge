@@ -61,9 +61,9 @@ defmodule FountainedgeTest do
     # Ranking.
     workflow = Graph.rank(workflow, "test1")
     assert workflow.schema.nodes == [
-      %Fountainedge.Node{id: 1, label: "First", rank: 1, type: :initial},
-      %Fountainedge.Node{id: 2, label: "Second", rank: 2},
-      %Fountainedge.Node{id: 3, label: "Third", rank: 3, type: :final}
+      %Node{id: 1, label: "First", rank: 1, type: :initial},
+      %Node{id: 2, label: "Second", rank: 2},
+      %Node{id: 3, label: "Third", rank: 3, type: :final}
     ]
   end
 
@@ -393,5 +393,58 @@ defmodule FountainedgeTest do
     |> Graphvix.Graph.compile("test4")
 
     Graph.rank(workflow, "test4")
+  end
+
+  test "can compute decision transitions" do
+    schema = %Schema{
+      nodes: [
+        %Node{id: 1, label: "Initial", type: :initial},
+        %Node{id: 2, label: "Choice 1"},
+        %Node{id: 3, label: "Choice 2"},
+        %Node{id: 4, label: "Final", type: :final},
+      ],
+      edges: [
+        %Edge{id: 1, next: 2},
+        %Edge{id: 1, next: 3},
+        %Edge{id: 2, next: 1},
+        %Edge{id: 2, next: 4},
+        %Edge{id: 3, next: 1},
+        %Edge{id: 3, next: 4},
+      ],
+    }
+
+    # Graphing.
+    Graph.graph(schema)
+    |> Graphvix.Graph.compile("test5", :png)
+
+    # Ranking.
+    schema = Graph.rank(schema, "test5")
+    assert schema.nodes == [
+      %Node{id: 1, label: "Initial", rank: 1, type: :initial},
+      %Node{id: 2, label: "Choice 1", rank: 2},
+      %Node{id: 3, label: "Choice 2", rank: 2},
+      %Node{id: 4, label: "Final", rank: 3, type: :final}
+    ]
+
+    # Initial state.
+    workflow = Workflow.initialize(schema)
+    assert workflow.states == [%State{id: 1}]
+    assert Fountainedge.out_edges(workflow) == [
+      %Edge{id: 1, next: 3},
+      %Edge{id: 1, next: 2},
+    ]
+
+    # First transition. (1 -> 3)
+    workflow = Fountainedge.transition(workflow, %Edge{id: 1, next: 3})
+    assert workflow.states == [%State{id: 3}]
+    assert Fountainedge.out_edges(workflow) == [
+      %Edge{id: 3, next: 4},
+      %Edge{id: 3, next: 1},
+    ]
+
+    # Last transition (3 -> 4)
+    workflow = Fountainedge.transition(workflow, %Edge{id: 3, next: 4})
+    assert workflow.states == [%State{id: 4}]
+    assert Fountainedge.out_edges(workflow) == []
   end
 end
