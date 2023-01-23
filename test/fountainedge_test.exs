@@ -25,6 +25,13 @@ defmodule FountainedgeTest do
     workflow = Workflow.initialize(schema)
     assert workflow.states == [%State{id: 1}]
     assert Fountainedge.out_edges(workflow) == [%Edge{id: 1, next: 2}]
+    assert Fountainedge.out_edge_nodes(workflow) == [
+      {
+        %Edge{id: 1, next: 2},
+        %Node{id: 1, label: "First", type: :initial},
+        %Node{id: 2, label: "Second"}
+      }
+    ]
 
     # First transition. (1 -> 2)
     workflow = Fountainedge.transition(workflow, %Edge{id: 1, next: 2})

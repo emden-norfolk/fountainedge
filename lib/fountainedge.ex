@@ -126,4 +126,20 @@ defmodule Fountainedge do
   end
 
   defp gather_out_edges(%Workflow{} = _workflow, out_edges, []), do: out_edges
+
+  @doc """
+  Returns a list of out edge nodes that are valid transitions.
+
+  Same as out_edges/1, but with the nodes also for convenience.
+  """
+  def out_edge_nodes(%Workflow{} = workflow) do
+    out_edges(workflow)
+    |> Enum.map(fn edge ->
+      {
+        edge,
+        Node.find(workflow.schema.nodes, edge.id),
+        Node.find(workflow.schema.nodes, edge.next)
+      }
+    end)
+  end
 end
