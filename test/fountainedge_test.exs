@@ -56,10 +56,10 @@ defmodule FountainedgeTest do
 
     # Graphing.
     Graph.graph(workflow)
-    |> Graphvix.Graph.compile("test1")
+    |> Graphvix.Graph.compile("test1", :png)
 
+    # Ranking.
     workflow = Graph.rank(workflow, "test1")
-
     assert workflow.schema.nodes == [
       %Fountainedge.Node{id: 1, label: "First", rank: 1, type: :initial},
       %Fountainedge.Node{id: 2, label: "Second", rank: 2},

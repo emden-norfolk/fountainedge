@@ -18,9 +18,11 @@ defmodule Fountainedge do
   """
   def transition %Workflow{} = workflow, %Edge{} = edge do
     edge = Edge.find(out_edges(workflow), edge)
+
     if edge == nil do
       raise "Invalid out edge given for transition."
     end
+
     %Workflow{workflow | states: transition(workflow.states, workflow.schema, edge)}
   end
 

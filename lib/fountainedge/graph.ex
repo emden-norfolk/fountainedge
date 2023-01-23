@@ -15,14 +15,74 @@ defmodule Fountainedge.Graph do
   information such as the current node (or nodes.)
   """
   def graph(%Workflow{} = workflow) do
-    graph(workflow.schema)
+    graph(workflow.schema, workflow.states)
   end
 
   def graph(%Schema{} = schema) do
+    graph(schema, [])
+  end
+
+  defp graph(%Schema{} = schema, states) do
     graph = Graph.new()
-    {graph, vertices} = vertices(graph, [], schema.nodes)
+    {graph, vertices} = vertices(graph, states, [], schema.nodes)
     edges(graph, vertices, schema.edges)
   end
+
+  defp vertices(graph, states, vertices, [node | nodes]) do
+    {label, attributes} = if node.type in [:fork, :join] do
+      {
+        # TODO pass in default styles?
+        nil,
+        [
+          id: node.id,
+          shape: "box",
+          style: "filled",
+          fillcolor: "black",
+          height: 0.1,
+          width: 2,
+          fixedsize: "true",
+        ]
+      }
+    else
+      # TODO else if?
+      if Enum.find(states, fn s -> s.id == node.id end) do
+        {
+          node.label || Integer.to_string(node.id),
+          [
+            id: node.id,
+            shape: "box",
+            color: "red",
+          ]
+        }
+      else
+        {
+          node.label || Integer.to_string(node.id),
+          [
+            id: node.id,
+            shape: "box",
+          ]
+        }
+      end
+    end
+
+    # Apply custom node attributes.
+    attributes = attributes ++ node.attributes
+
+    {graph, vertex_id} = Graph.add_vertex(graph, label, attributes)
+    vertices(graph, states, [{node.id, vertex_id}] ++ vertices, nodes)
+  end
+
+  defp vertices(graph, _states, vertices, []), do: {graph, vertices}
+
+  defp edges(graph, vertices, [edge | edges]) do
+    {_, current} = List.keyfind(vertices, edge.id, 0)
+    {_, next} = List.keyfind(vertices, edge.next, 0)
+
+    {graph, _edge_id} = Graph.add_edge(graph, current, next, edge.attributes)
+    edges(graph, vertices, edges)
+  end
+
+  defp edges(graph, _vertices, []), do: graph
 
   @doc """
   Ranks all nodes in a given schema.
@@ -62,49 +122,4 @@ defmodule Fountainedge.Graph do
 
     put_in(schema.nodes, ranking)
   end
-
-  defp vertices(graph, vertices, [node | nodes]) do
-
-    # TODO Why is simple logic so difficult in Elixir?
-    {label, attributes} = if node.type == :fork or node.type == :join do
-      {
-        nil,
-        [
-          id: node.id,
-          shape: "box",
-          style: "filled",
-          fillcolor: "black",
-          height: 0.1,
-          width: 2,
-          fixedsize: "true",
-        ]
-      }
-    else
-      {
-        node.label || Integer.to_string(node.id),
-        [
-          id: node.id,
-          shape: "box",
-        ]
-      }
-    end
-
-    # Apply custom node attributes.
-    attributes = attributes ++ node.attributes
-
-    {graph, vertex_id} = Graph.add_vertex(graph, label, attributes)
-    vertices(graph, [{node.id, vertex_id}] ++ vertices, nodes)
-  end
-
-  defp vertices(graph, vertices, []), do: {graph, vertices}
-
-  defp edges(graph, vertices, [edge | edges]) do
-    {_, current} = List.keyfind(vertices, edge.id, 0)
-    {_, next} = List.keyfind(vertices, edge.next, 0)
-
-    {graph, _edge_id} = Graph.add_edge(graph, current, next, edge.attributes)
-    edges(graph, vertices, edges)
-  end
-
-  defp edges(graph, _vertices, []), do: graph
 end
