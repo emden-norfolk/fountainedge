@@ -19,12 +19,7 @@ defmodule Fountainedge.Edge do
   @doc """
   Find a matching edge in a list (used internally.)
   """
-  # TODO Is this really that useful? Access the list directly instead?
   def find(edges, %Edge{} = edge) do
-    Enum.find(edges, fn e -> e == edge end)
-  end
-
-  def find(edges, id) do
-    Enum.find(edges, fn edge -> edge.id == id end)
+    Enum.find(edges, fn e -> e.id == edge.id && e.next == edge.next end)
   end
 end
