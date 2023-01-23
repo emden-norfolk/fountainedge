@@ -117,10 +117,10 @@ defmodule Fountainedge do
   defp gather_out_edges(%Workflow{} = workflow, out_edges, [edge | edges]) do
     node = Node.find(workflow.schema.nodes, edge.id)
 
-    case node.type do
-      :join -> gather_out_edges(workflow, out_edges, edges)
-      _ -> gather_out_edges(workflow, [edge | out_edges], edges)
-    end
+    gather_out_edges(workflow, (case node.type do
+      :join -> out_edges
+      _ -> [edge | out_edges]
+    end), edges)
   end
 
   defp gather_out_edges(%Workflow{} = _workflow, out_edges, []), do: out_edges
