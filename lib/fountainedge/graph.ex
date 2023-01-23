@@ -87,18 +87,18 @@ defmodule Fountainedge.Graph do
   @doc """
   Ranks all nodes in a given schema.
 
+  Will set the `rank` field on each `Fountainedge.Node` within the schema.
+
+  Useful for determining backward and forward directions between two nodes.
+  If the rank of the out edge node is less than the current node, then the
+  direction is backwards. Otherwise, if greater, then the direction is forwards.
+
   [`dot`](https://graphviz.org/docs/layouts/dot/) creates hierarchical
   or layered drawings of directed graphs. A ranking algorithmn is used
   to determine this heirarchy. It may be useful to use these ranks
   when determining direction in a workflow. Call this function to
   calculate ranks per each node.
-
-  Will set the `rank` field on each `Fountainedge.Node` within the schema.
   """
-  def rank(%Workflow{} = workflow, filename) do
-    %{workflow | schema: rank(workflow.schema, filename)}
-  end
-
   # Security warning: ensure all inputs to :os:cmd are sanitised.
   # TODO Think about https://hexdocs.pm/elixir/1.14/Path.html
   def rank(%Schema{} = schema, filename) do
