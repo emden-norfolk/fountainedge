@@ -122,4 +122,8 @@ defmodule Fountainedge.Graph do
 
     put_in(schema.nodes, ranking)
   end
+
+  def rank(%Workflow{} = workflow, filename) do
+    %{workflow | schema: rank(workflow.schema, filename)}
+  end
 end
