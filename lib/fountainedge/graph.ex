@@ -5,7 +5,7 @@ defmodule Fountainedge.Graph do
 
   alias Graphvix.Graph
   alias Fountainedge.Schema
-  alias Fountainedge, as: Workflow
+  alias Fountainedge.Workflow
 
   @doc """
   Graphs a schema as a [UML](https://www.omg.org/spec/UML/)

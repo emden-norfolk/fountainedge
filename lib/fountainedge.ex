@@ -6,15 +6,7 @@ defmodule Fountainedge do
   would elucidate an intuitive grasp of this package.
   """
 
-  # TODO Move most of this into a Workflow module.
-  # This would be breaking compatibility, so only do this for version 1 release.
-
-  alias __MODULE__, as: Workflow
-  alias Fountainedge.{Schema, Edge, State, Node, Token}
-
-  @enforce_keys [:schema, :states]
-
-  defstruct schema: %Schema{nodes: [], edges: []}, states: []
+  alias Fountainedge.{Workflow, Schema, Edge, State, Node, Token}
 
   @doc """
   Transition between nodes along an edge.
