@@ -26,7 +26,7 @@ defmodule FountainedgeTest do
     assert workflow.states == [%State{id: 1}]
     assert Fountainedge.out_edges(workflow) == [%Edge{id: 1, next: 2}]
 
-    # First transition.
+    # First transition. (1 -> 2)
     workflow = Fountainedge.transition(workflow, %Edge{id: 1, next: 2})
     assert workflow.states == [%State{id: 2}]
     assert Fountainedge.out_edges(workflow) == [
@@ -34,7 +34,22 @@ defmodule FountainedgeTest do
       %Edge{id: 2, next: 3}
     ]
 
-    # Second transition.
+    # Go back to first. (2 -> 1)
+    workflow = Fountainedge.transition(workflow, %Edge{id: 2, next: 1})
+    assert workflow.states == [%State{id: 1}]
+    assert Fountainedge.out_edges(workflow) == [
+      %Edge{id: 1, next: 2},
+    ]
+
+    # First transition again. (1 -> 2)
+    workflow = Fountainedge.transition(workflow, %Edge{id: 1, next: 2})
+    assert workflow.states == [%State{id: 2}]
+    assert Fountainedge.out_edges(workflow) == [
+      %Edge{id: 2, next: 1},
+      %Edge{id: 2, next: 3}
+    ]
+
+    # Second transition (last.) (2 -> 3)
     workflow = Fountainedge.transition(workflow, %Edge{id: 2, next: 3})
     assert workflow.states == [%State{id: 3}]
     assert Fountainedge.out_edges(workflow) == []
