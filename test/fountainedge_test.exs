@@ -178,12 +178,14 @@ defmodule FountainedgeTest do
         %Edge{id: 4, next: 8},
         %Edge{id: 3, next: 5},
         %Edge{id: 5, next: 6},
+        %Edge{id: 6, next: 5},
         %Edge{id: 6, next: 8},
         %Edge{id: 3, next: 7},
         %Edge{id: 7, next: 8},
         %Edge{id: 8, next: 11},
         %Edge{id: 2, next: 9},
         %Edge{id: 9, next: 10},
+        %Edge{id: 10, next: 9},
         %Edge{id: 10, next: 11},
         %Edge{id: 11, next: 12},
       ],
@@ -217,6 +219,7 @@ defmodule FountainedgeTest do
     assert Fountainedge.out_edges(workflow) == [
       %Edge{id: 7, next: 8},
       %Edge{id: 10, next: 11},
+      %Edge{id: 10, next: 9},
     ]
 
     workflow = Fountainedge.transition(workflow, %Edge{id: 7, next: 8})
