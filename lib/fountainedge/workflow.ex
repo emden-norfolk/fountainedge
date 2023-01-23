@@ -1,7 +1,10 @@
 defmodule Fountainedge.Workflow do
   @moduledoc """
-  The workflow is based on a `Fountainedge.Schema` and models
-  the current state of the flowchart as a list of `Fountainedge.State`s.
+  Models a workflow (stateful.)
+
+  The workflow is based on a `Fountainedge.Schema`
+
+  Current nodes of the flowchart are tracked a list of `Fountainedge.State`.
   """
 
   alias Fountainedge.{Workflow, Schema, State}
@@ -10,6 +13,11 @@ defmodule Fountainedge.Workflow do
 
   defstruct schema: %Schema{nodes: [], edges: []}, states: []
 
+  @doc """
+  Initialises a workflow.
+
+  Will set the current state to the initial node specified in the schema.
+  """
   def initialize %Schema{} = schema do
     initial_node = Enum.find(schema.nodes,  fn n -> n.type == :initial end)
 
