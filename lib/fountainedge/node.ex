@@ -71,9 +71,9 @@ defmodule Fountainedge.Node do
   * `:label` - Optional label.
   * `:rank` - Hierarchical rank of the node. The rank is used for determining backward and forward directions
     from the initial to final node when navigating through the workflow.
-    The rankingis are defined by calling `Fountainedge.Graph.rank/2` on the schema.
-  * `:attributes` Optional list of [edge attributes](https://graphviz.org/docs/edges/)
-    passed to `Graphvix.Graph.add_edge/4`.
+    The rankings are defined by calling `Fountainedge.Graph.rank/2` on the schema.
+  * `:attributes` Optional list of [node attributes](https://graphviz.org/docs/nodes/)
+    passed to `Graphvix.Graph.add_vertex/3`.
   """
 
   @type t :: %__MODULE__{
