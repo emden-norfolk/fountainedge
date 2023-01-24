@@ -92,4 +92,6 @@ def deps do
 end
 ```
 
+## Author
 
+2019 (c) Damien Bezborodov
