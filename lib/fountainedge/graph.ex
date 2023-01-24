@@ -5,7 +5,7 @@ defmodule Fountainedge.Graph do
 
   alias Graphvix.Graph
   alias Fountainedge.Schema
-  alias Fountainedge, as: Workflow
+  alias Fountainedge.Workflow
 
   @doc """
   Graphs a schema as a [UML](https://www.omg.org/spec/UML/)
@@ -15,30 +15,90 @@ defmodule Fountainedge.Graph do
   information such as the current node (or nodes.)
   """
   def graph(%Workflow{} = workflow) do
-    graph(workflow.schema)
+    graph(workflow.schema, workflow.states)
   end
 
   def graph(%Schema{} = schema) do
+    graph(schema, [])
+  end
+
+  defp graph(%Schema{} = schema, states) do
     graph = Graph.new()
-    {graph, vertices} = vertices(graph, [], schema.nodes)
+    {graph, vertices} = vertices(graph, states, [], schema.nodes)
     edges(graph, vertices, schema.edges)
   end
 
+  defp vertices(graph, states, vertices, [node | nodes]) do
+    {label, attributes} = if node.type in [:fork, :join] do
+      {
+        # TODO pass in default styles?
+        nil,
+        [
+          id: node.id,
+          shape: "box",
+          style: "filled",
+          fillcolor: "black",
+          height: 0.1,
+          width: 2,
+          fixedsize: "true",
+        ]
+      }
+    else
+      # TODO else if?
+      if Enum.find(states, fn s -> s.id == node.id end) do
+        {
+          node.label || Integer.to_string(node.id),
+          [
+            id: node.id,
+            shape: "box",
+            color: "red",
+          ]
+        }
+      else
+        {
+          node.label || Integer.to_string(node.id),
+          [
+            id: node.id,
+            shape: "box",
+          ]
+        }
+      end
+    end
+
+    # Apply custom node attributes.
+    attributes = attributes ++ node.attributes
+
+    {graph, vertex_id} = Graph.add_vertex(graph, label, attributes)
+    vertices(graph, states, [{node.id, vertex_id}] ++ vertices, nodes)
+  end
+
+  defp vertices(graph, _states, vertices, []), do: {graph, vertices}
+
+  defp edges(graph, vertices, [edge | edges]) do
+    {_, current} = List.keyfind(vertices, edge.id, 0)
+    {_, next} = List.keyfind(vertices, edge.next, 0)
+
+    {graph, _edge_id} = Graph.add_edge(graph, current, next, edge.attributes)
+    edges(graph, vertices, edges)
+  end
+
+  defp edges(graph, _vertices, []), do: graph
+
   @doc """
   Ranks all nodes in a given schema.
+
+  Will set the `rank` field on each `Fountainedge.Node` within the schema.
+
+  Useful for determining backward and forward directions between two nodes.
+  If the rank of the out edge node is less than the current node, then the
+  direction is backwards. Otherwise, if greater, then the direction is forwards.
 
   [`dot`](https://graphviz.org/docs/layouts/dot/) creates hierarchical
   or layered drawings of directed graphs. A ranking algorithmn is used
   to determine this heirarchy. It may be useful to use these ranks
   when determining direction in a workflow. Call this function to
   calculate ranks per each node.
-
-  Will set the `rank` field on each `Fountainedge.Node` within the schema.
   """
-  def rank(%Workflow{} = workflow, filename) do
-    %{workflow | schema: rank(workflow.schema, filename)}
-  end
-
   # Security warning: ensure all inputs to :os:cmd are sanitised.
   # TODO Think about https://hexdocs.pm/elixir/1.14/Path.html
   def rank(%Schema{} = schema, filename) do
@@ -63,48 +123,7 @@ defmodule Fountainedge.Graph do
     put_in(schema.nodes, ranking)
   end
 
-  defp vertices(graph, vertices, [node | nodes]) do
-
-    # TODO Why is simple logic so difficult in Elixir?
-    {label, attributes} = if node.type == :fork or node.type == :join do
-      {
-        nil,
-        [
-          id: node.id,
-          shape: "box",
-          style: "filled",
-          fillcolor: "black",
-          height: 0.1,
-          width: 2,
-          fixedsize: "true",
-        ]
-      }
-    else
-      {
-        node.label || Integer.to_string(node.id),
-        [
-          id: node.id,
-          shape: "box",
-        ]
-      }
-    end
-
-    # Apply custom node attributes.
-    attributes = attributes ++ node.attributes
-
-    {graph, vertex_id} = Graph.add_vertex(graph, label, attributes)
-    vertices(graph, [{node.id, vertex_id}] ++ vertices, nodes)
+  def rank(%Workflow{} = workflow, filename) do
+    %{workflow | schema: rank(workflow.schema, filename)}
   end
-
-  defp vertices(graph, vertices, []), do: {graph, vertices}
-
-  defp edges(graph, vertices, [edge | edges]) do
-    {_, current} = List.keyfind(vertices, edge.id, 0)
-    {_, next} = List.keyfind(vertices, edge.next, 0)
-
-    {graph, _edge_id} = Graph.add_edge(graph, current, next, edge.attributes)
-    edges(graph, vertices, edges)
-  end
-
-  defp edges(graph, _vertices, []), do: graph
 end

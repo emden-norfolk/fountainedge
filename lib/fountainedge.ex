@@ -6,15 +6,7 @@ defmodule Fountainedge do
   would elucidate an intuitive grasp of this package.
   """
 
-  # TODO Move most of this into a Workflow module.
-  # This would be breaking compatibility, so only do this for version 1 release.
-
-  alias __MODULE__, as: Workflow
-  alias Fountainedge.{Schema, Edge, State, Node, Token, OutEdge}
-
-  @enforce_keys [:schema, :states]
-
-  defstruct schema: %Schema{nodes: [], edges: []}, states: []
+  alias Fountainedge.{Workflow, Schema, Edge, State, Node, Token}
 
   @doc """
   Transition between nodes along an edge.
@@ -25,11 +17,16 @@ defmodule Fountainedge do
   A valid out edge must be given.
   """
   def transition %Workflow{} = workflow, %Edge{} = edge do
+    edge = Edge.find(out_edges(workflow), edge)
+
+    if edge == nil do
+      raise "Invalid out edge given for transition."
+    end
+
     %Workflow{workflow | states: transition(workflow.states, workflow.schema, edge)}
   end
 
   defp transition(states, %Schema{} = schema, %Edge{} = edge) do
-    edge = Edge.find(schema.edges, edge)
     node = Node.find(schema.nodes, edge.next)
     state = current_state states, edge
     next_state = %State{state | id: edge.next}
@@ -77,7 +74,7 @@ defmodule Fountainedge do
 
     if branches == Enum.count arrivals do
       join_states(states, node, origin_node, arrivals)
-      |> transition(schema, Edge.find(schema.edges, node.id))
+      |> transition(schema, Enum.find(schema.edges, fn e -> e.id == node.id end))
     else
       states
     end
@@ -114,9 +111,6 @@ defmodule Fountainedge do
 
   defp gather_out_edges_state(%Workflow{} = _workflow, out_edges, []), do: out_edges
 
-  # TODO remove?
-  # This has been made private. May be able to remove entirely?
-  # No need to pass in state as a client, should be internal.
   defp out_edges(%Workflow{} = workflow, %State{} = state) do
     edges = Enum.filter(workflow.schema.edges, fn edge -> edge.id == state.id end)
     gather_out_edges(workflow, [], edges)
@@ -125,14 +119,27 @@ defmodule Fountainedge do
   defp gather_out_edges(%Workflow{} = workflow, out_edges, [edge | edges]) do
     node = Node.find(workflow.schema.nodes, edge.id)
 
-    disabled = case node.type do
-      :join -> true
-      _ -> false
-    end
-
-    out_edge = %OutEdge{edge: edge, disabled: disabled}
-    gather_out_edges(workflow, [out_edge | out_edges], edges)
+    gather_out_edges(workflow, (case node.type do
+      :join -> out_edges
+      _ -> [edge | out_edges]
+    end), edges)
   end
 
   defp gather_out_edges(%Workflow{} = _workflow, out_edges, []), do: out_edges
+
+  @doc """
+  Returns a list of out edge nodes that are valid transitions.
+
+  Same as out_edges/1, but with the nodes also for convenience.
+  """
+  def out_edge_nodes(%Workflow{} = workflow) do
+    out_edges(workflow)
+    |> Enum.map(fn edge ->
+      {
+        edge,
+        Node.find(workflow.schema.nodes, edge.id),
+        Node.find(workflow.schema.nodes, edge.next)
+      }
+    end)
+  end
 end

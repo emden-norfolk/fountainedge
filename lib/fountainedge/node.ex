@@ -14,8 +14,7 @@ defmodule Fountainedge.Node do
   @doc """
   Find a matching node in a list (used internally.)
   """
-  # TODO Is this really that useful? Access the list directly instead?
   def find(nodes, id) do
-    Enum.find(nodes, fn node -> node.id == id end)
+    Enum.find(nodes, fn n -> n.id == id end)
   end
 end
