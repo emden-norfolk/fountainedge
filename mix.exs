@@ -17,6 +17,7 @@ defmodule Fountainedge.MixProject do
         extras: [
           "README.md"
         ],
+        main: "readme",
       ]
     ]
   end
