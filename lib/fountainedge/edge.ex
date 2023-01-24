@@ -24,8 +24,8 @@ defmodule Fountainedge.Edge do
   * `:next` - Identifier of the `Fountainedge.Node` where the edge is pointing (in to.)
   * `:attributes` Optional list of [edge attributes](https://graphviz.org/docs/edges/)
     passed to `Graphvix.Graph.add_edge/4`.
-
   """
+
   @type t :: %__MODULE__{
     id: integer,
     next: integer,

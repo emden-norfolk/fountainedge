@@ -6,7 +6,7 @@ defmodule Fountainedge.MixProject do
       app: :fountainedge,
       name: "Fountainedge",
       organization: "Emden Norfolk Computing Systems",
-      version: "1.0.2",
+      version: "1.0.3",
       elixir: "~> 1.8",
       start_permanent: Mix.env() == :prod,
       description: description(),
@@ -18,7 +18,6 @@ defmodule Fountainedge.MixProject do
           "README.md",
           "examples/EXAMPLE1.md",
         ],
-        main: "readme",
         source_ref: "master",
       ],
     ]

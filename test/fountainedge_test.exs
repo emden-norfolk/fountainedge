@@ -464,7 +464,7 @@ defmodule FountainedgeTest do
         %Node{id: 2, label: "Choice 1"},
         %Node{id: 3, label: "Choice 2"},
         %Node{id: 4, label: "Before Forking"},
-        %Node{id: 5, type: :fork},
+        %Node{id: 5, type: :fork, join: 9},
         %Node{id: 6, label: "Parallel 1.1"},
         %Node{id: 7, label: "Parallel 1.2"},
         %Node{id: 8, label: "Parallel 2"},

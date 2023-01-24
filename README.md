@@ -26,7 +26,7 @@ schema = %Fountainedge.Schema{
 	%Fountainedge.Node{id: 2, label: "Choice 1"},
 	%Fountainedge.Node{id: 3, label: "Choice 2"},
 	%Fountainedge.Node{id: 4, label: "Before Forking"},
-	%Fountainedge.Node{id: 5, type: :fork},
+	%Fountainedge.Node{id: 5, type: :fork, join: 9},
 	%Fountainedge.Node{id: 6, label: "Parallel 1.1"},
 	%Fountainedge.Node{id: 7, label: "Parallel 1.2"},
 	%Fountainedge.Node{id: 8, label: "Parallel 2"},
