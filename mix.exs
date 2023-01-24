@@ -18,6 +18,7 @@ defmodule Fountainedge.MixProject do
           "README.md"
         ],
         main: "readme",
+        source_ref: "master",
       ]
     ]
   end
