@@ -3,7 +3,6 @@ defmodule Fountainedge.Graph do
   Graphing functions.
   """
 
-  alias Graphvix.Graph
   alias Fountainedge.Schema
   alias Fountainedge.Workflow
 
@@ -13,7 +12,14 @@ defmodule Fountainedge.Graph do
 
   If given a workflow, the graph will be decorated with stateful
   information such as the current node (or nodes.)
+
+  The graph can then be compiled by Graphviz:
+
+      Fountainedge.Graph.graph(workflow)
+      |> Graphvix.Graph.compile("workflow_graph", :svg)
+
   """
+  @spec graph(Workflow.t() | Schema.t()) :: Graphvix.Graph.t()
   def graph(%Workflow{} = workflow) do
     graph(workflow.schema, workflow.states)
   end
@@ -23,7 +29,7 @@ defmodule Fountainedge.Graph do
   end
 
   defp graph(%Schema{} = schema, states) do
-    graph = Graph.new()
+    graph = Graphvix.Graph.new()
     {graph, vertices} = vertices(graph, states, [], schema.nodes)
     edges(graph, vertices, schema.edges)
   end
@@ -57,7 +63,7 @@ defmodule Fountainedge.Graph do
     # Apply custom node attributes.
     attributes = attributes ++ node.attributes
 
-    {graph, vertex_id} = Graph.add_vertex(graph, label, attributes)
+    {graph, vertex_id} = Graphvix.Graph.add_vertex(graph, label, attributes)
     vertices(graph, states, [{node.id, vertex_id}] ++ vertices, nodes)
   end
 
@@ -67,7 +73,7 @@ defmodule Fountainedge.Graph do
     {_, current} = List.keyfind(vertices, edge.id, 0)
     {_, next} = List.keyfind(vertices, edge.next, 0)
 
-    {graph, _edge_id} = Graph.add_edge(graph, current, next, edge.attributes)
+    {graph, _edge_id} = Graphvix.Graph.add_edge(graph, current, next, edge.attributes)
     edges(graph, vertices, edges)
   end
 
@@ -77,6 +83,8 @@ defmodule Fountainedge.Graph do
   Ranks all nodes in a given schema.
 
   Will set the `rank` field on each `Fountainedge.Node` within the schema.
+
+  Requires the `filename` of the dot file given to `Graphvix.Graph.compile/3`.
 
   Useful for determining backward and forward directions between two nodes.
   If the rank of the out edge node is less than the current node, then the
@@ -90,6 +98,7 @@ defmodule Fountainedge.Graph do
   """
   # Security warning: ensure all inputs to :os:cmd are sanitised.
   # TODO Think about https://hexdocs.pm/elixir/1.14/Path.html
+  @spec rank(Schema.t() | Workflow.t(), String.t()) :: Schema.t()
   def rank(%Schema{} = schema, filename) do
     #port_dot = Port.open({:spawn, "dot -Tdot #{filename}.dot "}, [:binary])
     # port_gvpr = Port.open({:spawn, "gvpr -f rank.gvpr"}, [:binary])
