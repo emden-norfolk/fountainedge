@@ -1,0 +1,29 @@
+digraph G {
+
+  v0 [label="Initial",id="1",shape="box"]
+  v1 [label="Choice 1",id="2",shape="box"]
+  v2 [label="Choice 2",id="3",shape="box"]
+  v3 [label="Before Forking",id="4",shape="box"]
+  v4 [label="",id="5",shape="box",style="filled",fillcolor="black",height="0.1",width="2",fixedsize="true"]
+  v5 [label="Parallel 1.1",id="6",shape="box"]
+  v6 [label="Parallel 1.2",id="7",shape="box"]
+  v7 [label="Parallel 2",id="8",shape="box"]
+  v8 [label="",id="9",shape="box",style="filled",fillcolor="black",height="0.1",width="2",fixedsize="true"]
+  v9 [label="After Joining",id="10",shape="box"]
+  v10 [label="Final",id="11",shape="box"]
+
+  v0 -> v1
+  v0 -> v2
+  v1 -> v3
+  v2 -> v3
+  v3 -> v4
+  v4 -> v5
+  v4 -> v7
+  v5 -> v6
+  v6 -> v5
+  v6 -> v8
+  v7 -> v8
+  v8 -> v9
+  v9 -> v10
+
+}
