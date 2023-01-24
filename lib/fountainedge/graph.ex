@@ -11,7 +11,7 @@ defmodule Fountainedge.Graph do
   Graphs a schema as a [UML](https://www.omg.org/spec/UML/)
   Activity Diagram using [Graphviz](https://graphviz.org/).
 
-  If given a workflow, the graph will be decorationed with stateful
+  If given a workflow, the graph will be decorated with stateful
   information such as the current node (or nodes.)
   """
   def graph(%Workflow{} = workflow) do
