@@ -17,7 +17,7 @@ This API is currently experimental (version 0.) A stable API will be released un
 
 ## Example
 
-![test6](examples/test6.svg)
+![test6](images/test6.svg)
 
 Define a schema:
 

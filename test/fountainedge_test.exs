@@ -491,6 +491,6 @@ defmodule FountainedgeTest do
 
     # Graphing.
     Graph.graph(schema)
-    |> Graphvix.Graph.compile("examples/test6", :svg)
+    |> Graphvix.Graph.compile("doc/images/test6", :svg)
   end
 end
