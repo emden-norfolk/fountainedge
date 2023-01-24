@@ -10,7 +10,7 @@ defmodule Fountainedge.Node do
 
   To create a paralell process, create a node of type `:fork`.
 
-  The fork node must be associated with a join node.
+  The fork node must be associated with a node of type `:join`.
 
   The forking node will create tokens for each out edge.
   The join node will synchronise the parallel processes by preventing the workflow

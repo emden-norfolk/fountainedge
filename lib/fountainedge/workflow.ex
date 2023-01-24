@@ -4,7 +4,7 @@ defmodule Fountainedge.Workflow do
 
   The workflow is based on a `Fountainedge.Schema`
 
-  Current nodes of the flowchart are tracked a list of `Fountainedge.State`.
+  Current nodes of the flowchart are tracked in a list of `Fountainedge.State`.
   """
 
   alias Fountainedge.{Workflow, Schema, State}
