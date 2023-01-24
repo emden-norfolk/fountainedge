@@ -1,0 +1,11 @@
+digraph G {
+
+  v0 [label="First",id="1",shape="box",color="red"]
+  v1 [label="Second",id="2",shape="box"]
+  v2 [label="Third",id="3",shape="box"]
+
+  v0 -> v1
+  v1 -> v2
+  v1 -> v0
+
+}

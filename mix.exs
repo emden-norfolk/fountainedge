@@ -15,11 +15,12 @@ defmodule Fountainedge.MixProject do
       source_url: "https://github.com/emden-norfolk/fountainedge",
       docs: [
         extras: [
-          "README.md"
+          "README.md",
+          "examples/EXAMPLE1.md",
         ],
         main: "readme",
         source_ref: "master",
-      ]
+      ],
     ]
   end
 

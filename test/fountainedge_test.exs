@@ -32,6 +32,8 @@ defmodule FountainedgeTest do
         %Node{id: 2, label: "Second"}
       }
     ]
+    Graph.graph(workflow)
+    |> Graphvix.Graph.compile("examples/test1_1", :svg)
 
     # First transition. (1 -> 2)
     workflow = Fountainedge.transition(workflow, %Edge{id: 1, next: 2})
@@ -40,6 +42,8 @@ defmodule FountainedgeTest do
       %Edge{id: 2, next: 1},
       %Edge{id: 2, next: 3}
     ]
+    Graph.graph(workflow)
+    |> Graphvix.Graph.compile("examples/test1_2", :svg)
 
     # Go back to first. (2 -> 1)
     workflow = Fountainedge.transition(workflow, %Edge{id: 2, next: 1})
@@ -60,10 +64,8 @@ defmodule FountainedgeTest do
     workflow = Fountainedge.transition(workflow, %Edge{id: 2, next: 3})
     assert workflow.states == [%State{id: 3}]
     assert Fountainedge.out_edges(workflow) == []
-
-    # Graphing.
     Graph.graph(workflow)
-    |> Graphvix.Graph.compile("test1", :png)
+    |> Graphvix.Graph.compile("examples/test1_3", :svg)
 
     # Ranking.
     schema = Graph.rank(workflow.schema, "test1")
@@ -453,5 +455,42 @@ defmodule FountainedgeTest do
     workflow = Fountainedge.transition(workflow, %Edge{id: 3, next: 4})
     assert workflow.states == [%State{id: 4}]
     assert Fountainedge.out_edges(workflow) == []
+  end
+
+  test "can do fun" do
+    schema = %Schema{
+      nodes: [
+        %Node{id: 1, label: "Initial", type: :initial},
+        %Node{id: 2, label: "Choice 1"},
+        %Node{id: 3, label: "Choice 2"},
+        %Node{id: 4, label: "Before Forking"},
+        %Node{id: 5, type: :fork},
+        %Node{id: 6, label: "Parallel 1.1"},
+        %Node{id: 7, label: "Parallel 1.2"},
+        %Node{id: 8, label: "Parallel 2"},
+        %Node{id: 9, type: :join},
+        %Node{id: 10, label: "After Joining"},
+        %Node{id: 11, label: "Final", type: :final},
+      ],
+      edges: [
+        %Edge{id: 1, next: 2},
+        %Edge{id: 1, next: 3},
+        %Edge{id: 2, next: 4},
+        %Edge{id: 3, next: 4},
+        %Edge{id: 4, next: 5},
+        %Edge{id: 5, next: 6},
+        %Edge{id: 5, next: 8},
+        %Edge{id: 6, next: 7},
+        %Edge{id: 7, next: 6},
+        %Edge{id: 7, next: 9},
+        %Edge{id: 8, next: 9},
+        %Edge{id: 9, next: 10},
+        %Edge{id: 10, next: 11},
+      ],
+    }
+
+    # Graphing.
+    Graph.graph(schema)
+    |> Graphvix.Graph.compile("examples/test6", :svg)
   end
 end
