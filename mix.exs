@@ -12,7 +12,12 @@ defmodule Fountainedge.MixProject do
       description: description(),
       package: package(),
       deps: deps(),
-      source_url: "https://github.com/emden-norfolk/fountainedge"
+      source_url: "https://github.com/emden-norfolk/fountainedge",
+      docs: [
+        extras: [
+          "README.md"
+        ],
+      ]
     ]
   end
 
