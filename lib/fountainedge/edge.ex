@@ -14,11 +14,28 @@ defmodule Fountainedge.Edge do
 
   @enforce_keys [:id, :next]
 
-  defstruct id: nil, next: nil, attributes: []
+  defstruct id: nil,
+    next: nil,
+    attributes: []
+
+  @typedoc """
+  Edge structure.
+  * `:id` - Identifier of the `Fountainedge.Node` where the edge is leaving (out from.)
+  * `:next` - Identifier of the `Fountainedge.Node` where the edge is pointing (in to.)
+  * `:attributes` Optional list of [edge attributes](https://graphviz.org/docs/edges/)
+    passed to `Graphvix.Graph.add_edge/4`.
+
+  """
+  @type t :: %__MODULE__{
+    id: integer,
+    next: integer,
+    attributes: list()
+  }
 
   @doc """
   Find a matching edge in a list (used internally.)
   """
+  @spec find(list(Fountainedge.Edge.t()), Fountainedge.Edge.t()) :: Fountainedge.Edge.t() | nil
   def find(edges, %Edge{} = edge) do
     Enum.find(edges, fn e -> e.id == edge.id && e.next == edge.next end)
   end
