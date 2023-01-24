@@ -44,25 +44,14 @@ defmodule Fountainedge.Graph do
         ]
       }
     else
-      # TODO else if?
-      if Enum.find(states, fn s -> s.id == node.id end) do
-        {
-          node.label || Integer.to_string(node.id),
-          [
-            id: node.id,
-            shape: "box",
-            color: "red",
-          ]
-        }
-      else
-        {
-          node.label || Integer.to_string(node.id),
-          [
-            id: node.id,
-            shape: "box",
-          ]
-        }
-      end
+      {
+        node.label || Integer.to_string(node.id),
+        [
+          id: node.id,
+          shape: (if node.type in [:initial, :final], do: "oval", else: "box"),
+          color: (if Enum.find(states, fn s -> s.id == node.id end), do: "red", else: "black")
+        ]
+      }
     end
 
     # Apply custom node attributes.
