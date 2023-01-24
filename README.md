@@ -19,8 +19,10 @@ This API is currently experimental (version 0.) A stable API will be released un
 
 ![test6](examples/test6.svg)
 
+Define a schema:
+
 ```elixir
-%Schema{
+schema = %Schema{
   nodes: [
 	%Node{id: 1, label: "Initial", type: :initial},
 	%Node{id: 2, label: "Choice 1"},
@@ -50,6 +52,32 @@ This API is currently experimental (version 0.) A stable API will be released un
 	%Edge{id: 10, next: 11},
   ],  
 }   
+```
+
+Initialise the workflow:
+
+```elixir
+workflow = Workflow.initialize(schema)
+```
+
+Get a list of valid out edges:
+
+```elixir
+Fountainedge.out_edges(workflow)
+# [%Edge{id: 1, next: 2}]
+```
+
+Transition along an out edge:
+
+```elixir
+workflow = Fountainedge.transition(workflow, %Edge{id: 1, next: 2})
+```
+
+Graphing:
+
+```elixir
+Graph.graph(workflow)
+|> Graphvix.Graph.compile(filename, :svg)
 ```
 
 ## Installation
