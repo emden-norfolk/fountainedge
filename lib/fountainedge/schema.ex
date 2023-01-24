@@ -7,4 +7,15 @@ defmodule Fountainedge.Schema do
   @enforce_keys [:nodes, :edges]
 
   defstruct nodes: [], edges: []
+
+  @typedoc """
+  Schema structure.
+  * `:nodes` - List of nodes.
+  * `:edges` - List of edges.
+  """
+
+  @type t :: %__MODULE__{
+    nodes: list(Fountainedge.Node.t()),
+    edges: list(Fountainedge.Edge.t())
+  }
 end

@@ -10,7 +10,7 @@ defmodule Fountainedge.Token do
 
   @typedoc """
   Token structure.
-  * `:id` - Identifier of the `Fountainedge.Node` where the fork originated (type `:fork`.)
+  * `:id` - Identifier of the `Fountainedge.Node` from where the fork originated (type `:fork`.)
   * `:token` - Identifier of the `Fountainedge.Node` where the out edge points to.
     Thereby, this is unique; one token is created per each out edge from the fork.
   """
