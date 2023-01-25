@@ -13,7 +13,7 @@
 * HTTPD demo.
   * [Erlang HTTP Server](https://www.erlang.org/doc/apps/inets/http_server.html), or
   * [Cowboy](https://ninenines.eu/) and [Plug](https://hexdocs.pm/plug/readme.html).
-  * Clickable SVG links.
+  * Clickable SVG links. [`href`](https://graphviz.org/docs/attrs/href/)
 
 ## Validation
 
