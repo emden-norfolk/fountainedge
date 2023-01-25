@@ -26,14 +26,32 @@ Raises exception?
 
 Three error levels:
 
- * `:none`: No validation (use with care.)
- * `:enforcing`: Check for conditions that will break functionality, or are bad practice or against the original intention of the design.
- * `:strict`: Things that aren't nice or will just break rendering of the graph.
+ * `:none` - No validation (use with care.)
+ * `:enforcing` - Check for conditions that will break functionality, or are bad practice or against the original intention of the design.
+ * `:strict` - Things that aren't nice or will just break rendering of the graph.
+
+No intial node will always raise an exception, even with `:none`.
 
 ### Enforcing
 
- * 
+ * Edges counts:
+    * One edge into fork.
+    * One edge out of join.
+    * All nodes (other than initial and final) must have an in and out edge.
+      *  Initial node at least one edge out.
+      *  Final node at least one edge in.
+    * Fork nodes must have at least two out edges.
+    * Join nodes must have at least two in edges.
+ * One initial node omly.
+ * At least one final node.
+ * Nodes must have a unique identifier.
+ * Check that forking nodes point to a valid join node.
+ * Check all edges point to a valid node identifier.
+ * Check for duplicate edges.
 
 ### Strict
 
- * 
+ * Only one final node.
+ * One edge only out of initial.
+ * No edge out of final node.
+ * No edge into intial node.
