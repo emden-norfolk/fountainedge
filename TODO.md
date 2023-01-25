@@ -10,6 +10,10 @@
 * Updating dependencies:
   * `graphvix` (requires Elixir version increase -- will be a minor release version therefore -- remember to set Elixir version in `mix.exs`.)
   * `decimal` (as above.)
+* HTTPD demo.
+  * [Erlang HTTP Server](https://www.erlang.org/doc/apps/inets/http_server.html), or
+  * [Cowboy](https://ninenines.eu/) and [Plug](https://hexdocs.pm/plug/readme.html).
+  * Clickable SVG links.
 
 ## Validation
 
