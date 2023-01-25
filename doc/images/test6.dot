@@ -20,8 +20,8 @@ digraph G {
   v4 -> v5
   v4 -> v7
   v5 -> v6
-  v6 -> v5 [label="Back"]
-  v6 -> v8 [label="Forward"]
+  v6 -> v5
+  v6 -> v8
   v7 -> v8
   v8 -> v9
   v9 -> v10
