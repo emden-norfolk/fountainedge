@@ -13,14 +13,12 @@
 
 ## Validation
 
-Validation will be a future feature when the package is proven to be popular (i.e., 10 or more stars, or bugs reported in the Issue Tracker.
+Validation will be a future feature if there is desire for it.
 It will have functionality changes but largely remain backwards-compatible, so therefore it will be a minor release version.
 
 Even though validation is not implemented yet, it would be a good idea to use this list as a guide for best practice.
 
-Pass extra option into `initialise/2`.
-
-Raises exception?
+Pass extra option into `initialise/2`. Raises exception?
 
 `validation/1` gives a list of errors. Default to `:enforcing`.
 
@@ -42,7 +40,7 @@ No intial node will always raise an exception, even with `:none`.
       *  Final node at least one edge in.
     * Fork nodes must have at least two out edges.
     * Join nodes must have at least two in edges.
- * One initial node omly.
+ * One initial node only.
  * At least one final node.
  * Nodes must have a unique identifier.
  * Check that forking nodes point to a valid join node.
