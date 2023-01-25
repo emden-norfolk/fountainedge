@@ -28,9 +28,9 @@ Pass extra option into `initialise/2`. Raises exception?
 
 Three error levels:
 
- * `:none` - No validation (use with care.)
- * `:enforcing` - Check for conditions that will break functionality, or are bad practice or against the original intention of the design.
- * `:strict` - Things that aren't nice or will just break rendering of the graph.
+ 1) `:none` - No validation (use with care.)
+ 2) `:enforcing` - Check for conditions that will break functionality, or are bad practice or against the original intention of the design.
+ 3) `:strict` - Things that aren't nice or will just break rendering of the graph.
 
 No intial node will always raise an exception, even with `:none`.
 
