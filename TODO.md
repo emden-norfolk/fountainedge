@@ -3,7 +3,7 @@
 * `:initial` [node shape](https://graphviz.org/doc/info/shapes.html) to `circle` and `:final`
     node shape to `doublecircle` respectively if label is nil.
 * Decision node (node with more than one out edge) shape `diamond`.
-* Hash (#) notation for tokens at the join node. Might be possible with [`xlabel`](https://graphviz.org/docs/attrs/xlabel/).
+* ~~Hash (#) notation for tokens at the join node. Might be possible with [`xlabel`](https://graphviz.org/docs/attrs/xlabel/).~~ ✓
 * Neverending todo:
   * Document more examples.
   * Unit tests.
@@ -49,7 +49,6 @@ No intial node will always raise an exception, even with `:none`.
 
 ### Strict
 
- * Only one final node.
  * One edge only out of initial.
  * No edge out of final node.
  * No edge into intial node.

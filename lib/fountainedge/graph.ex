@@ -36,6 +36,9 @@ defmodule Fountainedge.Graph do
 
   # https://graphviz.org/doc/info/shapes.html
   defp vertices(graph, states, vertices, [node | nodes]) do
+    # Number of active states at the current node.
+    active = Enum.count(states, fn s -> s.id == node.id end)
+
     {label, attributes} = if node.type in [:fork, :join] do
       {
         nil,
@@ -47,6 +50,8 @@ defmodule Fountainedge.Graph do
           height: 0.1,
           width: 2,
           fixedsize: "true",
+          xlabel: (if active > 0, do: String.duplicate("#", active), else: nil),
+          fontcolor: "red",
         ]
       }
     else
@@ -55,7 +60,7 @@ defmodule Fountainedge.Graph do
         [
           id: node.id,
           shape: (if node.type in [:initial, :final], do: "oval", else: "box"),
-          color: (if Enum.find(states, fn s -> s.id == node.id end), do: "red", else: "black")
+          color: (if active > 0, do: "red", else: "black"),
         ]
       }
     end
