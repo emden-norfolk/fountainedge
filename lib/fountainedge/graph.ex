@@ -21,17 +21,13 @@ defmodule Fountainedge.Graph do
   """
   @spec graph(Workflow.t() | Schema.t()) :: Graphvix.Graph.t()
   def graph(%Workflow{} = workflow) do
-    graph(workflow.schema, workflow.states)
+    graph = Graphvix.Graph.new()
+    {graph, vertices} = vertices(graph, workflow.states, [], workflow.schema.nodes)
+    edges(graph, vertices, workflow.schema.edges)
   end
 
   def graph(%Schema{} = schema) do
-    graph(schema, [])
-  end
-
-  defp graph(%Schema{} = schema, states) do
-    graph = Graphvix.Graph.new()
-    {graph, vertices} = vertices(graph, states, [], schema.nodes)
-    edges(graph, vertices, schema.edges)
+    graph(%Workflow{schema: schema, states: []})
   end
 
   # https://graphviz.org/doc/info/shapes.html
