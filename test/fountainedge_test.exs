@@ -68,7 +68,7 @@ defmodule FountainedgeTest do
     |> Graphvix.Graph.compile("examples/test1_3", :svg)
 
     # Ranking.
-    schema = Graph.rank(workflow.schema, "test1")
+    schema = Graph.rank(workflow.schema, "examples/test1_3")
     assert schema.nodes == [
       %Node{id: 1, label: "First", rank: 1, type: :initial},
       %Node{id: 2, label: "Second", rank: 2},
