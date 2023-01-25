@@ -1,5 +1,13 @@
 # Todo
 
+* `:initial` [node shape](https://graphviz.org/doc/info/shapes.html) to `circle` and `:final`
+    node shape to `doublecircle` respectively if label is nil.
+* Decision node (node with more than one out edge) shape `diamond`.
+* Hash (#) notation for tokens at the join node.
+* Neverending todo:
+  * Document more examples.
+  * Unit tests.
+
 ## Validation
 
 Validation will be a future feature when the package is proven to be popular (i.e., 10 or more stars, or bugs reported in the Issue Tracker.
