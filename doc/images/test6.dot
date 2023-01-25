@@ -12,16 +12,16 @@ digraph G {
   v9 [label="After Joining",id="10",shape="box",color="black"]
   v10 [label="Final",id="11",shape="oval",color="black"]
 
-  v0 -> v1
-  v0 -> v2
+  v0 -> v1 [label="Y"]
+  v0 -> v2 [label="N"]
   v1 -> v3
   v2 -> v3
   v3 -> v4
   v4 -> v5
   v4 -> v7
   v5 -> v6
-  v6 -> v5
-  v6 -> v8
+  v6 -> v5 [label="Back"]
+  v6 -> v8 [label="Forward"]
   v7 -> v8
   v8 -> v9
   v9 -> v10

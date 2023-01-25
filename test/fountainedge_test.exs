@@ -473,8 +473,8 @@ defmodule FountainedgeTest do
         %Node{id: 11, label: "Final", type: :final},
       ],
       edges: [
-        %Edge{id: 1, next: 2},
-        %Edge{id: 1, next: 3},
+        %Edge{id: 1, next: 2, attributes: [label: "Y"]},
+        %Edge{id: 1, next: 3, attributes: [label: "N"]},
         %Edge{id: 2, next: 4},
         %Edge{id: 3, next: 4},
         %Edge{id: 4, next: 5},

@@ -19,6 +19,9 @@ defmodule Fountainedge.MixProject do
           "examples/EXAMPLE1.md",
         ],
         source_ref: "master",
+        authors: [
+          "Damien BEZBORODOV",
+        ],
       ],
     ]
   end

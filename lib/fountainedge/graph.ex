@@ -34,10 +34,10 @@ defmodule Fountainedge.Graph do
     edges(graph, vertices, schema.edges)
   end
 
+  # https://graphviz.org/doc/info/shapes.html
   defp vertices(graph, states, vertices, [node | nodes]) do
     {label, attributes} = if node.type in [:fork, :join] do
       {
-        # TODO pass in default styles?
         nil,
         [
           id: node.id,
