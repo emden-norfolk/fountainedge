@@ -22,7 +22,7 @@ defmodule Fountainedge.Graph do
   @spec graph(Workflow.t() | Schema.t()) :: Graphvix.Graph.t()
   def graph(%Workflow{} = workflow) do
     graph = Graphvix.Graph.new()
-    {graph, vertices} = vertices(graph, workflow.states, [], workflow.schema.nodes)
+    {graph, vertices} = vertices(graph, workflow, [], workflow.schema.nodes)
     edges(graph, vertices, workflow.schema.edges)
   end
 
@@ -31,11 +31,12 @@ defmodule Fountainedge.Graph do
   end
 
   # https://graphviz.org/doc/info/shapes.html
-  defp vertices(graph, states, vertices, [node | nodes]) do
+  defp vertices(%Graphvix.Graph{} = graph, %Workflow{} = workflow, vertices, [node | nodes]) do
     # Number of active states at the current node.
-    active = Enum.count(states, fn s -> s.id == node.id end)
+    active = Enum.count(workflow.states, fn s -> s.id == node.id end)
 
     {label, attributes} = if node.type in [:fork, :join] do
+      # Fork on join node.
       {
         nil,
         [
@@ -51,11 +52,19 @@ defmodule Fountainedge.Graph do
         ]
       }
     else
+      # Decision node has more than one out edge.
+      decision_node = Enum.count(workflow.schema.edges, fn e -> e.id == node.id end) > 1
+
+      # Normal node (including initial and final.)
       {
         node.label || Integer.to_string(node.id),
         [
           id: node.id,
-          shape: (if node.type in [:initial, :final], do: "oval", else: "box"),
+          shape: (cond do
+            node.type in [:initial, :final] -> "oval"
+            decision_node -> "diamond"
+            true -> "box"
+          end),
           color: (if active > 0, do: "red", else: "black"),
         ]
       }
@@ -65,10 +74,10 @@ defmodule Fountainedge.Graph do
     attributes = attributes ++ node.attributes
 
     {graph, vertex_id} = Graphvix.Graph.add_vertex(graph, label, attributes)
-    vertices(graph, states, [{node.id, vertex_id}] ++ vertices, nodes)
+    vertices(%Graphvix.Graph{} = graph, workflow, [{node.id, vertex_id}] ++ vertices, nodes)
   end
 
-  defp vertices(graph, _states, vertices, []), do: {graph, vertices}
+  defp vertices(graph, %Workflow{} = _workflow, vertices, []), do: {graph, vertices}
 
   defp edges(graph, vertices, [edge | edges]) do
     {_, current} = List.keyfind(vertices, edge.id, 0)

@@ -6,7 +6,7 @@ digraph G {
   v3 [label="Before Forking",id="4",shape="box",color="black"]
   v4 [label="",id="5",shape="box",style="filled",fillcolor="black",height="0.1",width="2",fixedsize="true",xlabel="",fontcolor="red"]
   v5 [label="Parallel 1.1",id="6",shape="box",color="black"]
-  v6 [label="Parallel 1.2",id="7",shape="box",color="black"]
+  v6 [label="Parallel 1.2",id="7",shape="diamond",color="black"]
   v7 [label="Parallel 2",id="8",shape="box",color="black"]
   v8 [label="",id="9",shape="box",style="filled",fillcolor="black",height="0.1",width="2",fixedsize="true",xlabel="",fontcolor="red"]
   v9 [label="After Joining",id="10",shape="box",color="black"]

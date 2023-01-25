@@ -2,7 +2,7 @@
 
 * `:initial` [node shape](https://graphviz.org/doc/info/shapes.html) to `circle` and `:final`
     node shape to `doublecircle` respectively if label is nil.
-* Decision node (node with more than one out edge) shape `diamond`.
+* ~~Decision node (node with more than one out edge) shape `diamond`.~~ ✓
 * ~~Hash (#) notation for tokens at the join node. Might be possible with [`xlabel`](https://graphviz.org/docs/attrs/xlabel/).~~ ✓
 * Neverending todo:
   * Document more examples.
