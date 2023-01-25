@@ -146,6 +146,9 @@ defmodule FountainedgeTest do
     assert Fountainedge.out_edges(workflow) == [
       %Edge{id: 6, next: 7},
     ]
+    # Graphing.
+    Graph.graph(workflow)
+    |> Graphvix.Graph.compile("test2_4-7")
 
     # Try something invalid, like going ahead too soon before the other token has joined.
     assert_raise RuntimeError, "Invalid out edge given for transition.", fn ->
@@ -161,7 +164,7 @@ defmodule FountainedgeTest do
 
     # Graphing.
     Graph.graph(workflow)
-    |> Graphvix.Graph.compile("test2")
+    |> Graphvix.Graph.compile("test2_6-7")
   end
 
   test "nested forks and joins" do
