@@ -31,43 +31,57 @@ defmodule Fountainedge.Graph do
   end
 
   # https://graphviz.org/doc/info/shapes.html
+  # https://graphviz.org/docs/nodes/
   defp vertices(%Graphvix.Graph{} = graph, %Workflow{} = workflow, vertices, [node | nodes]) do
     # Number of active states at the current node.
     active = Enum.count(workflow.states, fn s -> s.id == node.id end)
 
-    {label, attributes} = if node.type in [:fork, :join] do
-      # Fork on join node.
-      {
-        nil,
-        [
-          id: node.id,
-          shape: "box",
-          style: "filled",
-          fillcolor: "black",
-          height: 0.1,
-          width: 2,
-          fixedsize: "true",
-          xlabel: (if active > 0, do: String.duplicate("#", active), else: nil),
-          fontcolor: "red",
-        ]
-      }
-    else
-      # Decision node has more than one out edge.
-      decision_node = Enum.count(workflow.schema.edges, fn e -> e.id == node.id end) > 1
+    {label, attributes} = cond do
+      node.type in [:fork, :join] ->
+        # Fork or join node.
+        {
+          nil,
+          [
+            id: node.id,
+            shape: "box",
+            style: "filled",
+            fillcolor: "black",
+            height: 0.1,
+            width: 2,
+            fixedsize: "true",
+            xlabel: (if active > 0, do: String.duplicate("#", active), else: nil),
+            fontcolor: "red",
+          ]
+        }
+      node.type in [:initial, :final] && !node.label ->
+        # Initial or final node without a label.
+        {
+          nil,
+          [
+            id: node.id,
+            shape: (if node.type == :initial, do: "circle", else: "doublecircle"),
+            style: "filled",
+            fillcolor: "black",
+            height: (if node.type == :initial, do: 0.3, else: 0.2),
+          ]
+        }
+      true ->
+        # Decision node has more than one out edge.
+        decision_node = Enum.count(workflow.schema.edges, fn e -> e.id == node.id end) > 1
 
-      # Normal node (including initial and final.)
-      {
-        node.label || Integer.to_string(node.id),
-        [
-          id: node.id,
-          shape: (cond do
-            node.type in [:initial, :final] -> "oval"
-            decision_node -> "diamond"
-            true -> "box"
-          end),
-          color: (if active > 0, do: "red", else: "black"),
-        ]
-      }
+        # Normal node (including initial and final.)
+        {
+          node.label || Integer.to_string(node.id),
+          [
+            id: node.id,
+            shape: (cond do
+              node.type in [:initial, :final] -> "oval"
+              decision_node -> "diamond"
+              true -> "box"
+            end),
+            color: (if active > 0, do: "red", else: "black"),
+          ]
+        }
     end
 
     # Apply custom node attributes.
@@ -79,6 +93,7 @@ defmodule Fountainedge.Graph do
 
   defp vertices(graph, %Workflow{} = _workflow, vertices, []), do: {graph, vertices}
 
+  # https://graphviz.org/docs/edges/
   defp edges(graph, vertices, [edge | edges]) do
     {_, current} = List.keyfind(vertices, edge.id, 0)
     {_, next} = List.keyfind(vertices, edge.next, 0)
