@@ -8,7 +8,7 @@ defmodule Fountainedge.Node do
 
   ## Forking and Synchronisation
 
-  To create a paralell process, create a node of type `:fork`.
+  To create a parallel process, create a node of type `:fork`.
 
   The fork node must be associated with a node of type `:join`.
 
