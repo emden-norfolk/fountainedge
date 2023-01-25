@@ -7,6 +7,9 @@
 * Neverending todo:
   * Document more examples.
   * Unit tests.
+* Updating dependencies:
+  * `graphvix` (requires Elixir version increase -- will be a minor release version therefore -- remember to set Elixir version in `mix.exs`.)
+  * `decimal` (as above.)
 
 ## Validation
 
