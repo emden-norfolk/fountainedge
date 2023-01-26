@@ -1,29 +1,31 @@
 digraph G {
 
-  v0 [label="Initial",id="1",shape="oval",color="black"]
-  v1 [label="Choice 1",id="2",shape="box",color="black"]
-  v2 [label="Choice 2",id="3",shape="box",color="black"]
-  v3 [label="Before Forking",id="4",shape="box",color="black"]
-  v4 [label="",id="5",shape="box",style="filled",fillcolor="black",height="0.1",width="2",fixedsize="true",xlabel="",fontcolor="red"]
-  v5 [label="Parallel 1.1",id="6",shape="box",color="black"]
-  v6 [label="Parallel 1.2",id="7",shape="diamond",color="black"]
-  v7 [label="Parallel 2",id="8",shape="box",color="black"]
-  v8 [label="",id="9",shape="box",style="filled",fillcolor="black",height="0.1",width="2",fixedsize="true",xlabel="",fontcolor="red"]
-  v9 [label="After Joining",id="10",shape="box",color="black"]
-  v10 [label="Final",id="11",shape="oval",color="black"]
+  v0 [label="",id="100",shape="circle",style="filled",fillcolor="black",height="0.3"]
+  v1 [label="Decision",id="1",shape="diamond",color="black"]
+  v2 [label="Choice 1",id="2",shape="box",color="black"]
+  v3 [label="Choice 2",id="3",shape="box",color="black"]
+  v4 [label="Before Forking",id="4",shape="box",color="black"]
+  v5 [label="",id="5",shape="box",style="filled",fillcolor="black",height="0.1",width="2",fixedsize="true",xlabel="",fontcolor="red"]
+  v6 [label="Parallel 1.1",id="6",shape="box",color="red"]
+  v7 [label="Parallel 1.2",id="7",shape="diamond",color="black"]
+  v8 [label="Parallel 2",id="8",shape="box",color="black"]
+  v9 [label="",id="9",shape="box",style="filled",fillcolor="black",height="0.1",width="2",fixedsize="true",xlabel="#",fontcolor="red"]
+  v10 [label="After Joining",id="10",shape="box",color="black"]
+  v11 [label="",id="11",shape="doublecircle",style="filled",fillcolor="black",height="0.2"]
 
-  v0 -> v1 [label="Y"]
-  v0 -> v2 [label="N"]
-  v1 -> v3
-  v2 -> v3
+  v0 -> v1
+  v1 -> v2 [label="Y"]
+  v1 -> v3 [label="N"]
+  v2 -> v4
   v3 -> v4
   v4 -> v5
-  v4 -> v7
   v5 -> v6
-  v6 -> v5
-  v6 -> v8
-  v7 -> v8
+  v5 -> v8
+  v6 -> v7
+  v7 -> v6
+  v7 -> v9
   v8 -> v9
   v9 -> v10
+  v10 -> v11
 
 }

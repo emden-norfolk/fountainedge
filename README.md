@@ -20,55 +20,58 @@ The workflow is modelled as graphs consisting of nodes and edges. Parallel forks
 Define a schema:
 
 ```elixir
-schema = %Fountainedge.Schema{
+alias Fountainedge.{Workflow, Schema, Node, Edge}
+schema = %Schema{
   nodes: [
-	%Fountainedge.Node{id: 1, label: "Initial", type: :initial},
-	%Fountainedge.Node{id: 2, label: "Choice 1"},
-	%Fountainedge.Node{id: 3, label: "Choice 2"},
-	%Fountainedge.Node{id: 4, label: "Before Forking"},
-	%Fountainedge.Node{id: 5, type: :fork, join: 9},
-	%Fountainedge.Node{id: 6, label: "Parallel 1.1"},
-	%Fountainedge.Node{id: 7, label: "Parallel 1.2"},
-	%Fountainedge.Node{id: 8, label: "Parallel 2"},
-	%Fountainedge.Node{id: 9, type: :join},
-	%Fountainedge.Node{id: 10, label: "After Joining"},
-	%Fountainedge.Node{id: 11, label: "Final", type: :final},
+    %Node{id: 100, type: :initial},
+    %Node{id: 1, label: "Decision"},
+    %Node{id: 2, label: "Choice 1"},
+    %Node{id: 3, label: "Choice 2"},
+    %Node{id: 4, label: "Before Forking"},
+    %Node{id: 5, type: :fork, join: 9},
+    %Node{id: 6, label: "Parallel 1.1"},
+    %Node{id: 7, label: "Parallel 1.2"},
+    %Node{id: 8, label: "Parallel 2"},
+    %Node{id: 9, type: :join},
+    %Node{id: 10, label: "After Joining"},
+    %Node{id: 11, type: :final},
   ],
   edges: [
-	%Fountainedge.Edge{id: 1, next: 2}, 
-	%Fountainedge.Edge{id: 1, next: 3}, 
-	%Fountainedge.Edge{id: 2, next: 4}, 
-	%Fountainedge.Edge{id: 3, next: 4}, 
-	%Fountainedge.Edge{id: 4, next: 5}, 
-	%Fountainedge.Edge{id: 5, next: 6}, 
-	%Fountainedge.Edge{id: 5, next: 8}, 
-	%Fountainedge.Edge{id: 6, next: 7}, 
-	%Fountainedge.Edge{id: 7, next: 6}, 
-	%Fountainedge.Edge{id: 7, next: 9}, 
-	%Fountainedge.Edge{id: 8, next: 9}, 
-	%Fountainedge.Edge{id: 9, next: 10},
-	%Fountainedge.Edge{id: 10, next: 11},
-  ],  
+    %Edge{id: 100, next: 1},
+    %Edge{id: 1, next: 2, attributes: [label: "Y"]},
+    %Edge{id: 1, next: 3, attributes: [label: "N"]},
+    %Edge{id: 2, next: 4},
+    %Edge{id: 3, next: 4},
+    %Edge{id: 4, next: 5},
+    %Edge{id: 5, next: 6},
+    %Edge{id: 5, next: 8},
+    %Edge{id: 6, next: 7},
+    %Edge{id: 7, next: 6},
+    %Edge{id: 7, next: 9},
+    %Edge{id: 8, next: 9},
+    %Edge{id: 9, next: 10},
+    %Edge{id: 10, next: 11},
+  ],
 }   
 ```
 
 Initialise the workflow:
 
 ```elixir
-workflow = Fountainedge.Workflow.initialize(schema)
+workflow = Workflow.initialize(schema)
 ```
 
 Get a list of valid out edges:
 
 ```elixir
 Fountainedge.out_edges(workflow)
-# [%Fountainedge.Edge{id: 1, next: 2}]
+# [%Edge{id: 1, next: 2}]
 ```
 
 Transition along an out edge:
 
 ```elixir
-workflow = Fountainedge.transition(workflow, %Fountainedge.Edge{id: 1, next: 2})
+workflow = Fountainedge.transition(workflow, %Edge{id: 1, next: 2})
 ```
 
 Graphing:

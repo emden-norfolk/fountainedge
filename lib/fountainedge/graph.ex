@@ -61,7 +61,7 @@ defmodule Fountainedge.Graph do
             id: node.id,
             shape: (if node.type == :initial, do: "circle", else: "doublecircle"),
             style: "filled",
-            fillcolor: "black",
+            fillcolor: (if active > 0, do: "red", else: "black"),
             height: (if node.type == :initial, do: 0.3, else: 0.2),
           ]
         }

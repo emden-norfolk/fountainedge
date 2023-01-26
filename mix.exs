@@ -6,7 +6,7 @@ defmodule Fountainedge.MixProject do
       app: :fountainedge,
       name: "Fountainedge Workflow Engine",
       organization: "Emden Norfolk Computing Systems",
-      version: "1.0.7",
+      version: "1.0.8",
       elixir: "~> 1.8",
       start_permanent: Mix.env() == :prod,
       description: description(),

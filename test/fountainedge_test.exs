@@ -463,7 +463,8 @@ defmodule FountainedgeTest do
   test "can do fun" do
     schema = %Schema{
       nodes: [
-        %Node{id: 1, label: "Initial", type: :initial},
+        %Node{id: 100, type: :initial},
+        %Node{id: 1, label: "Decision"},
         %Node{id: 2, label: "Choice 1"},
         %Node{id: 3, label: "Choice 2"},
         %Node{id: 4, label: "Before Forking"},
@@ -473,9 +474,10 @@ defmodule FountainedgeTest do
         %Node{id: 8, label: "Parallel 2"},
         %Node{id: 9, type: :join},
         %Node{id: 10, label: "After Joining"},
-        %Node{id: 11, label: "Final", type: :final},
+        %Node{id: 11, type: :final},
       ],
       edges: [
+        %Edge{id: 100, next: 1},
         %Edge{id: 1, next: 2, attributes: [label: "Y"]},
         %Edge{id: 1, next: 3, attributes: [label: "N"]},
         %Edge{id: 2, next: 4},
@@ -492,10 +494,17 @@ defmodule FountainedgeTest do
       ],
     }
 
+    workflow = Workflow.initialize(schema)
+    workflow = Fountainedge.transition(workflow, %Edge{id: 100, next: 1})
+    workflow = Fountainedge.transition(workflow, %Edge{id: 1, next: 3})
+    workflow = Fountainedge.transition(workflow, %Edge{id: 3, next: 4})
+    workflow = Fountainedge.transition(workflow, %Edge{id: 4, next: 5})
+    workflow = Fountainedge.transition(workflow, %Edge{id: 8, next: 9})
+
     # Graphing.
-    Graph.graph(schema)
+    Graph.graph(workflow)
     |> Graphvix.Graph.compile("images/test6", :svg)
-    Graph.graph(schema)
+    Graph.graph(workflow)
     |> Graphvix.Graph.compile("doc/images/test6", :svg)
   end
 end
