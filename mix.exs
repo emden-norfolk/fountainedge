@@ -4,7 +4,7 @@ defmodule Fountainedge.MixProject do
   def project do
     [
       app: :fountainedge,
-      name: "Fountainedge",
+      name: "Fountainedge Workflow Engine",
       organization: "Emden Norfolk Computing Systems",
       version: "1.0.7",
       elixir: "~> 1.8",
@@ -14,6 +14,7 @@ defmodule Fountainedge.MixProject do
       deps: deps(),
       source_url: "https://github.com/emden-norfolk/fountainedge",
       docs: [
+        main: "Fountainedge",
         extras: [
           "README.md",
           "examples/EXAMPLE1.md",

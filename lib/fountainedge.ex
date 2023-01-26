@@ -15,7 +15,13 @@ defmodule Fountainedge do
   processess are tracked using tokens.
 
   A valid out edge must be given.
+
+  The following example will transition along the edge from node 1 to node 2, provided
+  that it is a valid out edge given the current status of the workflow:
+
+      workflow = Fountainedge.transition(workflow, %Edge{id: 1, next: 2})
   """
+  @spec transition(Workflow.t(), Edge.t()) :: Workflow.t()
   def transition %Workflow{} = workflow, %Edge{} = edge do
     edge = Edge.find(out_edges(workflow), edge)
 
@@ -95,10 +101,11 @@ defmodule Fountainedge do
   @doc """
   Returns a list of out edges that are valid transitions.
 
-  The out edge is an edge leading out of a current node.
+  An out edge is an edge leading out of any of the current nodes.
 
-  Then pass the chosen edge into `Fountainedge.transition/2`.
+  Then pass the chosen edge into `transition/2`.
   """
+  @spec out_edges(Workflow.t()) :: [Edge.t()] | []
   def out_edges(%Workflow{} = workflow) do
     gather_out_edges_state(workflow, [], workflow.states)
     |> Enum.uniq()
@@ -130,8 +137,9 @@ defmodule Fountainedge do
   @doc """
   Returns a list of out edge nodes that are valid transitions.
 
-  Same as out_edges/1, but with the nodes also for convenience.
+  Same as `out_edges/1`, but with the nodes resolved also for convenience.
   """
+  @spec out_edge_nodes(Workflow.t()) :: [{Edge.t(), Node.t(), Node.t()}] | []
   def out_edge_nodes(%Workflow{} = workflow) do
     out_edges(workflow)
     |> Enum.map(fn edge ->

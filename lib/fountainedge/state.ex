@@ -3,7 +3,7 @@ defmodule Fountainedge.State do
   Tracks the current progression of the workflow (stateful.)
 
   `Fountainedge.Workflow` saves its status in a state list.
-  Each active node receives a token. In linear mode, only one state is in the state list.
+  Each active node receives a state. In linear mode, only one state is in the state list.
   Upon leaving a forking node, a state is created with a unique token for each out edge.
   Nested forks will result in multiple tokens being carried.
   """

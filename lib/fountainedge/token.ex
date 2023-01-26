@@ -1,6 +1,8 @@
 defmodule Fountainedge.Token do
   @moduledoc """
   Tokens track parallel progression from a fork to a join.
+
+  They belong to a `Fountainedge.State`.
   """
 
   @enforce_keys [:id, :token]
