@@ -8,6 +8,9 @@
 Workflow Patterns](https://github.com/emden-norfolk/fountainedge/raw/master/BPMN_wfh.pdf) by Stephen A. White, IBM Corporation*. 
 Uses [Graphviz](https://graphviz.org/) for graphical representations as [UML](https://www.omg.org/spec/UML/) Activity Diagrams.
 
+Execution of tasks is not supported; however, such functionality could be
+built on top.
+
  * [Hex Package](https://hex.pm/packages/fountainedge)
  * [Documentation](https://hexdocs.pm/fountainedge)
 
