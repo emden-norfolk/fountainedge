@@ -125,8 +125,19 @@ defmodule Fountainedge.Graph do
   # TODO Think about https://hexdocs.pm/elixir/1.14/Path.html
   @spec rank(Schema.t() | Workflow.t(), String.t()) :: Schema.t()
   def rank(%Schema{} = schema, filename) do
-    #port_dot = Port.open({:spawn, "dot -Tdot #{filename}.dot "}, [:binary])
-    # port_gvpr = Port.open({:spawn, "gvpr -f rank.gvpr"}, [:binary])
+    {:ok, gvpr_server} = Fountainedge.Graph.GVPR.start_link()
+
+    {:ok, dot_server} = Fountainedge.Graph.Dot.start_link([
+      filename: filename,
+      gvpr_server: gvpr_server,
+    ])
+
+    ref = Process.monitor(gvpr_server)
+    #ref = Process.monitor(dot_server)
+
+    receive do
+      msg -> IO.inspect msg
+    end
 
     filename_rank_gvpr = to_string(:code.priv_dir(:fountainedge)) <> "/rank.gvpr"
 
