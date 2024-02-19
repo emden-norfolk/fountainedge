@@ -1,9 +1,5 @@
 # Fountainedge
 
-**NOTICE: VERSION 0.1 to VERSION 1.0 UPGRADE HAS BREAKING API CHANGES**
-
-----
-
 **Fountainedge** is a simple workflow engine written in [Elixir](https://elixir-lang.org/) that roughly models forks and joins as described in the paper, *[Process Modeling Notations and
 Workflow Patterns](https://github.com/emden-norfolk/fountainedge/raw/master/BPMN_wfh.pdf) by Stephen A. White, IBM Corporation*. 
 Uses [Graphviz](https://graphviz.org/) for graphical representations as [UML](https://www.omg.org/spec/UML/) Activity Diagrams.
